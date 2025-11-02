@@ -1,0 +1,10 @@
+Welcome to Lynn’s Engraving Kiosk (v1.0)
+
+To launch on macOS or Linux:
+1. Open Terminal
+2. Navigate to this folder
+3. Run the following:
+   chmod +x setup.sh
+   ./setup.sh
+
+The kiosk will start automatically at http://localhost:5000
