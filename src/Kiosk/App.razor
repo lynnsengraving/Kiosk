@@ -1,0 +1,18 @@
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p class="text-center" style="color: #FFD700; margin-top:2rem;">
+                ⚠️ Page not found. Click below to return home.
+            </p>
+            <button class="nav-btn" @onclick="GoHome">🏠 Back to Home</button>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    [Inject] NavigationManager NavigationManager { get; set; } = default!;
+    void GoHome() => NavigationManager.NavigateTo("/");
+}

@@ -1,0 +1,6 @@
+@page "/orderstatus"
+@inject NavigationManager NavigationManager
+<h1 class="page-title">Order Status</h1>
+<p>Track your orders and get SMS or email notifications when complete.</p>
+<button class="nav-btn" @onclick="GoHome">🏠 Back to Home</button>
+@code { void GoHome() => NavigationManager.NavigateTo("/"); }

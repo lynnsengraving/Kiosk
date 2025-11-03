@@ -1,0 +1,6 @@
+@page "/customsketch"
+@inject NavigationManager NavigationManager
+<h1 class="page-title">Custom Sketch</h1>
+<p>Use the drawing pad below to sketch your custom design ideas.</p>
+<button class="nav-btn" @onclick="GoHome">🏠 Back to Home</button>
+@code { void GoHome() => NavigationManager.NavigateTo("/"); }

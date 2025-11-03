@@ -1,0 +1,13 @@
+@inherits Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>@ViewData["Title"] - Lynn's Engraving Kiosk</title>
+<base href="/Kiosk/" />
+<link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+<header style="background:rgba(0,0,0,.8);padding:1rem;color:#FFD700;font-size:1.6rem;text-align:center;font-weight:bold;">🏅 Lynn's Engraving Boutique Kiosk</header>
+<main role="main" class="pb-3" style="padding:2rem;min-height:70vh;">@RenderBody()</main>
+<footer style="text-align:center;padding:1rem;background:rgba(0,0,0,.8);color:#d2b48c;font-size:.9rem;">© 2025 Lynn's Engraving | Built with pride for our service members 🇺🇸</footer>
+@RenderSection("Scripts", required: false)
+</body></html>

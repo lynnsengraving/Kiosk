@@ -1,0 +1,6 @@
+@page "/plaques"
+@inject NavigationManager NavigationManager
+<h1 class="page-title">Plaques</h1>
+<p>Create custom plaques for awards, retirements, or commemorations.</p>
+<button class="nav-btn" @onclick="GoHome">🏠 Back to Home</button>
+@code { void GoHome() => NavigationManager.NavigateTo("/"); }

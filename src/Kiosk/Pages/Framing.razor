@@ -1,0 +1,6 @@
+@page "/framing"
+@inject NavigationManager NavigationManager
+<h1 class="page-title">Framing</h1>
+<p>Order professional framing for certificates, photos, and awards.</p>
+<button class="nav-btn" @onclick="GoHome">🏠 Back to Home</button>
+@code { void GoHome() => NavigationManager.NavigateTo("/"); }

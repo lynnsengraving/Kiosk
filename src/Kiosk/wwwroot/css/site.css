@@ -1,0 +1,4 @@
+.page-title{font-size:2rem;color:#FFD700;margin-bottom:.5rem;}
+p{color:#f5deb3;font-size:1.1rem;}
+.nav-btn{margin-top:1rem;padding:.6rem 1.5rem;border-radius:12px;background:#000;color:#FFD700;border:2px solid #FFD700;font-weight:600;cursor:pointer;transition:.3s;}
+.nav-btn:hover{background:#FFD700;color:#000;}

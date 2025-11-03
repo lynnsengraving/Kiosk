@@ -1,0 +1,6 @@
+@page "/dogtags"
+@inject NavigationManager NavigationManager
+<h1 class="page-title">Dog Tags</h1>
+<p>Design custom-engraved dog tags with text, unit insignia, and serial numbers.</p>
+<button class="nav-btn" @onclick="GoHome">🏠 Back to Home</button>
+@code { void GoHome() => NavigationManager.NavigateTo("/"); }

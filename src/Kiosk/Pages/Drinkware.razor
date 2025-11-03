@@ -1,0 +1,6 @@
+@page "/drinkware"
+@inject NavigationManager NavigationManager
+<h1 class="page-title">Drinkware</h1>
+<p>Personalize mugs, cups, and tumblers with text or logo engraving.</p>
+<button class="nav-btn" @onclick="GoHome">🏠 Back to Home</button>
+@code { void GoHome() => NavigationManager.NavigateTo("/"); }

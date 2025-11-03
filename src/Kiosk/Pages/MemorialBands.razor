@@ -1,0 +1,6 @@
+@page "/memorialbands"
+@inject NavigationManager NavigationManager
+<h1 class="page-title">Memorial Bands</h1>
+<p>Customize engraved memorial wristbands to honor service and sacrifice.</p>
+<button class="nav-btn" @onclick="GoHome">🏠 Back to Home</button>
+@code { void GoHome() => NavigationManager.NavigateTo("/"); }

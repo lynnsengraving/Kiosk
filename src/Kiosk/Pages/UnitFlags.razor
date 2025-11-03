@@ -1,0 +1,6 @@
+@page "/unitflags"
+@inject NavigationManager NavigationManager
+<h1 class="page-title">Unit Flags</h1>
+<p>Design and order embroidered military unit flags and banners.</p>
+<button class="nav-btn" @onclick="GoHome">🏠 Back to Home</button>
+@code { void GoHome() => NavigationManager.NavigateTo("/"); }
