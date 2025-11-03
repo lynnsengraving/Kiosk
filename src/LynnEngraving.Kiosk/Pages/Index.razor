@@ -1,0 +1,21 @@
+@page "/"
+@inject NavigationManager Navigation
+
+<h1 class="center">Lynn's Engraving Kiosk</h1>
+<p class="subtitle">Tap a category to begin your order.</p>
+
+<div class="grid">
+@foreach (var name in Buttons)
+{
+    <button class="kiosk-btn" @onclick="() => Go(name)">@name</button>
+}
+</div>
+
+@code {
+    List<string> Buttons = new() {
+        "Memorial Bands", "Dog Tags", "Drinkware", "Plaques",
+        "Frames & Framing", "Large / Complex", "Custom Orders", "Other"
+    };
+
+    void Go(string name) => Navigation.NavigateTo($"/order/{Uri.EscapeDataString(name)}");
+}

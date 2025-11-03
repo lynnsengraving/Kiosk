@@ -1,0 +1,43 @@
+@page "/order/{ProductType}"
+@inject HttpClient Http
+@inject NavigationManager Nav
+
+<h2>@ProductType</h2>
+
+<div class="form">
+    <input placeholder="Customer Name" @bind="CustomerName" />
+    <input placeholder="Email" @bind="Email" />
+    <input placeholder="Phone" @bind="Phone" />
+    <textarea placeholder="Notes" @bind="Notes"></textarea>
+    <button class="primary" @onclick="Submit">Submit</button>
+</div>
+
+@code {
+    [Parameter] public string? ProductType { get; set; }
+    string CustomerName = "";
+    string Email = "";
+    string Phone = "";
+    string Notes = "";
+
+    async Task Submit()
+    {
+        var payload = new {
+            ProductType = ProductType,
+            CustomerName,
+            Email,
+            Phone,
+            Notes
+        };
+
+        try
+        {
+            var res = await Http.PostAsJsonAsync("http://localhost:5001/api/orders", payload);
+            if (res.IsSuccessStatusCode)
+                Nav.NavigateTo("/confirmation");
+        }
+        catch
+        {
+            Nav.NavigateTo("/confirmation");
+        }
+    }
+}
