@@ -1,0 +1,12 @@
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.csproj.AssemblyReference.cache
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/rpswa.dswa.cache.json
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.GeneratedMSBuildEditorConfig.editorconfig
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.AssemblyInfoInputs.cache
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.AssemblyInfo.cs
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.csproj.CoreCompileInputs.cache
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.MvcApplicationPartsAssemblyInfo.cache
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.RazorAssemblyInfo.cache
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.RazorAssemblyInfo.cs
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.dll
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/refint/LynnsEngraving.Kiosk.dll
+/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/obj/Debug/net9.0/LynnsEngraving.Kiosk.pdb

@@ -1,0 +1,77 @@
+is_global = true
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = LynnsEngraving.Kiosk
+build_property.RootNamespace = LynnsEngraving.Kiosk
+build_property.ProjectDir = /Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 9.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/CustomSketch.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ3VzdG9tU2tldGNoLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/DogTags.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRG9nVGFncy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/Drinkware.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRHJpbmt3YXJlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/Framing.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRnJhbWluZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/MemorialBands.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTWVtb3JpYWxCYW5kcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/OrderStatus.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvT3JkZXJTdGF0dXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/Plaques.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUGxhcXVlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/UnitFlags.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVW5pdEZsYWdzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL01haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dad/Desktop/Lynn/LynnsEngraving_v1.3/src/Kiosk/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
