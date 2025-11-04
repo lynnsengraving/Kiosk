@@ -1,0 +1,65 @@
+/*─────────────────────────────────────────────
+  Lynn’s Engraving Kiosk Theme v1.0
+  Boutique Color Palette: Walnut, Cream, Black
+  Version: 1.0 — November 2025
+  Author: Lynn’s Engraving Team
+  Description: Responsive boutique kiosk layout 
+  optimized for tablets, kiosks, and touch displays.
+──────────────────────────────────────────────*/
+
+:root {
+  --walnut: #5C4033;
+  --cream: #FFF8E7;
+  --black: #111111;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--black);
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  background-color: var(--walnut);
+  color: var(--cream);
+  padding: 1rem 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.6rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  justify-items: center;
+}
+
+button {
+  background-color: var(--walnut);
+  color: var(--cream);
+  border: none;
+  border-radius: 10px;
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  width: 100%;
+  transition: 0.3s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.25);
+}
+
+button:hover {
+  background-color: var(--cream);
+  color: var(--walnut);
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0,0,0,0.35);
+}
+
+@media (max-width: 768px) {
+  header { font-size: 1.3rem; }
+  .button-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
