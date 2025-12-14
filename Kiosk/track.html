@@ -1,117 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Order Tracking – Lynn’s Engraving</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Tracking – Lynn’s Engraving</title>
 
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #FFF8E7;
-    color: #333;
-    text-align: center;
-    padding: 40px;
-  }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #FFF8E7;
+      color: #333;
+      text-align: center;
+      padding: 40px 16px;
+    }
 
-  h1 {
-    color: #5C4033;
-  }
+    h1 { color: #5C4033; margin-bottom: 8px; }
+    p { margin-top: 0; }
 
-  input {
-    padding: 10px;
-    width: 260px;
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
+    input {
+      padding: 10px;
+      width: 260px;
+      max-width: 100%;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      text-transform: uppercase;
+    }
 
-  button {
-    padding: 10px 16px;
-    font-size: 16px;
-    margin: 6px;
-    cursor: pointer;
-  }
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      margin: 6px;
+      cursor: pointer;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: #fff;
+    }
 
-  .home-btn {
-    background: #5C4033;
-    color: #FFF8E7;
-    border: none;
-  }
+    .home-btn {
+      background: #5C4033;
+      color: #FFF8E7;
+      border: none;
+    }
 
-  .result {
-    margin-top: 20px;
-    font-size: 18px;
-  }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      background: #fff;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.12);
+      text-align: left;
+    }
 
-  .error {
-    color: red;
-  }
-</style>
+    .error { color: #b00020; font-weight: 700; }
+    .muted { color: #666; font-size: 14px; margin-top: 8px; text-align: center; }
+  </style>
 </head>
 
 <body>
 
-<h1>Thank You for Your Order!</h1>
-<p>Please enter your tracking number below to see your order status.</p>
+  <h1>Thank You for Your Order!</h1>
+  <p>Enter your tracking number to see your order status.</p>
 
-<input id="trackingInput" placeholder="Ex: MB-966194" />
-<br>
+  <input id="trackingInput" placeholder="Ex: MB-966194" autocomplete="off" />
+  <br>
 
-<button onclick="checkStatus()">Check Status</button>
-<button class="home-btn" onclick="goHome()">Home</button>
+  <button id="checkBtn" type="button">Check Status</button>
+  <button class="home-btn" id="homeBtn" type="button">Home</button>
 
-<div id="result" class="result"></div>
+  <div id="result" class="result">
+    <div class="muted">Tip: If you just submitted an order, your tracking code may look like <b>MB-123456</b>.</div>
+  </div>
 
 <script>
-  // 🔹 Simple "database"
+  // 🔹 Simple demo "database"
   const orders = {
-    "MB-966194": {
-      name: "Custom Memorial Band",
-      status: "In Production",
-      updated: "December 14, 2025"
-    },
-    "MB-123456": {
-      name: "Engraved Frame",
-      status: "Shipped",
-      updated: "December 12, 2025"
-    },
-    "MB-907918": {
-      name: "Custom Engraved Item",
-      status: "Processing",
-      updated: "December 14, 2025"
-    }
+    "MB-966194": { name: "Custom Memorial Band", status: "In Production", updated: "December 14, 2025" },
+    "MB-123456": { name: "Engraved Frame",       status: "Shipped",       updated: "December 12, 2025" },
+    "MB-907918": { name: "Custom Engraved Item", status: "Processing",    updated: "December 14, 2025" }
   };
 
-  function checkStatus() {
-    const input = document.getElementById("trackingInput").value.trim().toUpperCase();
-    const result = document.getElementById("result");
+  const inputEl = document.getElementById("trackingInput");
+  const resultEl = document.getElementById("result");
+  const checkBtn = document.getElementById("checkBtn");
+  const homeBtn  = document.getElementById("homeBtn");
 
-    if (!input) {
-      result.innerHTML = "<span class='error'>Please enter a tracking number.</span>";
+  function renderNotFound(code) {
+    resultEl.innerHTML = `
+      <div class="error">Tracking number not found.</div>
+      <div class="muted">Entered: <b>${code}</b></div>
+      <div class="muted">If you just placed your order, please allow a moment and try again.</div>
+    `;
+  }
+
+  function checkStatus() {
+    const code = (inputEl.value || "").trim().toUpperCase();
+
+    if (!code) {
+      resultEl.innerHTML = `<div class="error">Please enter a tracking number.</div>`;
       return;
     }
 
-    if (orders[input]) {
-      result.innerHTML = `
-        <strong>Tracking Number:</strong> ${input}<br>
-        <strong>Item:</strong> ${orders[input].name}<br>
-        <strong>Status:</strong> ${orders[input].status}<br>
-        <strong>Last Updated:</strong> ${orders[input].updated}
-      `;
-    } else {
-      result.innerHTML = "<span class='error'>Tracking number not found.</span>";
+    const order = orders[code];
+    if (!order) {
+      renderNotFound(code);
+      return;
     }
+
+    resultEl.innerHTML = `
+      <div><strong>Tracking Number:</strong> ${code}</div>
+      <div><strong>Item:</strong> ${order.name}</div>
+      <div><strong>Status:</strong> ${order.status}</div>
+      <div><strong>Last Updated:</strong> ${order.updated}</div>
+    `;
   }
 
   function goHome() {
-    window.location.href = "index.html"; 
+    window.location.href = "index.html";
   }
 
-  // 🔹 AUTO-LOAD TRACKING NUMBER FROM URL
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
+  // Buttons
+  checkBtn.addEventListener("click", checkStatus);
+  homeBtn.addEventListener("click", goHome);
 
-  if (code) {
-    document.getElementById("trackingInput").value = code.toUpperCase();
+  // Enter key triggers search
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") checkStatus();
+  });
+
+  // 🔹 AUTO-LOAD TRACKING NUMBER FROM URL (?code=MB-123456)
+  const params = new URLSearchParams(window.location.search);
+  const codeFromUrl = params.get("code");
+
+  if (codeFromUrl) {
+    inputEl.value = codeFromUrl.toUpperCase();
     checkStatus();
   }
 </script>
