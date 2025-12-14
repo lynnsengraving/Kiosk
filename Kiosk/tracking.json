@@ -1,38 +1,17 @@
 {
-  "MB-1001": {
-    "item": "Memorial Band",
+  "LYNN-1001": {
     "status": "In Production",
     "lastUpdate": "2025-12-12",
-    "message": "Your memorial band is currently being engraved."
+    "message": "Your custom order is currently being engraved."
   },
-  "DT-1002": {
-    "item": "Dog Tags",
+  "LYNN-1002": {
     "status": "Shipped",
     "lastUpdate": "2025-12-13",
-    "message": "Your dog tags have shipped via USPS."
+    "message": "Your order has shipped via USPS."
   },
-  "DW-1003": {
-    "item": "Drinkware",
+  "LYNN-1003": {
     "status": "Delivered",
     "lastUpdate": "2025-12-14",
-    "message": "Your drinkware order was delivered. Thank you!"
-  },
-  "PL-1004": {
-    "item": "Plaque",
-    "status": "Processing",
-    "lastUpdate": "2025-12-14",
-    "message": "Your plaque order is being prepared for engraving."
-  },
-  "FR-1005": {
-    "item": "Frame & Framing",
-    "status": "In Production",
-    "lastUpdate": "2025-12-15",
-    "message": "Your custom frame is currently in production."
-  },
-  "CO-1006": {
-    "item": "Custom Order",
-    "status": "Received",
-    "lastUpdate": "2025-12-15",
-    "message": "We’ve received your custom request and will contact you shortly."
+    "message": "Your order was delivered. Thank you!"
   }
 }

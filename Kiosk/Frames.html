@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Frames - Lynn’s Engraving</title>
 
-  <!-- IMPORTANT: GitHub Pages path -->
-  <base href="/Kiosk/Kiosk/">
-
   <style>
     :root{
       --walnut:#5C4033;
@@ -32,6 +29,7 @@
       color:var(--walnut);
     }
 
+    /* Slideshow (kiosk size) */
     .slideshow-container{
       width:520px;
       max-width:calc(100vw - 40px);
@@ -57,6 +55,7 @@
       background:#000;
     }
 
+    /* Arrows */
     .nav-btn{
       cursor:pointer;
       position:absolute;
@@ -76,6 +75,7 @@
     .nav-prev{ left:10px; }
     .nav-next{ right:10px; }
 
+    /* Dots */
     .dots{
       display:flex;
       justify-content:center;
@@ -93,6 +93,7 @@
     }
     .dot.active{ background:var(--walnut); }
 
+    /* Form */
     form{
       background:#fff;
       padding:20px;
@@ -132,7 +133,10 @@
       box-sizing:border-box;
     }
 
-    textarea{ resize:vertical; min-height:120px; }
+    textarea{
+      resize:vertical;
+      min-height:120px;
+    }
 
     .btn{
       width:100%;
@@ -187,6 +191,7 @@
 <header>Lynn’s Engraving Kiosk – Frames &amp; Framing</header>
 
 <div class="slideshow-container" id="slideshow">
+  <!-- ✅ Replace these with your real frame images when ready -->
   <div class="slide"><img src="Images/mb31.webp" alt="Frame Example 1"></div>
   <div class="slide"><img src="Images/mb30.png"  alt="Frame Example 2"></div>
   <div class="slide"><img src="Images/mb28.jpeg" alt="Frame Example 3"></div>
@@ -197,6 +202,7 @@
 
 <div class="dots" id="dotsWrap"></div>
 
+<!-- ✅ Web3Forms form -->
 <form id="orderForm" enctype="multipart/form-data">
   <input type="hidden" name="access_key" value="ac2a3a1e-0b8f-4460-ae85-3e63a64a377d">
 
@@ -258,7 +264,7 @@
         const s = getSlides();
         if (!s.length) {
           dotsWrap.innerHTML = "";
-          stopTimer();
+          clearInterval(timer);
           return;
         }
         slideIndex = Math.min(slideIndex, s.length - 1);
@@ -304,24 +310,14 @@
   function next(){ goTo(slideIndex + 1); }
   function prev(){ goTo(slideIndex - 1); }
 
-  function stopTimer(){
-    if (timer) clearInterval(timer);
-    timer = null;
-  }
-
   function resetTimer() {
-    stopTimer();
+    clearInterval(timer);
     timer = setInterval(next, intervalMs);
   }
 
   prevBtn.addEventListener("click", prev);
   nextBtn.addEventListener("click", next);
 
-  // Pause on hover
-  slideshow.addEventListener("mouseenter", stopTimer);
-  slideshow.addEventListener("mouseleave", resetTimer);
-
-  // Swipe
   let startX = 0;
   slideshow.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive:true });
   slideshow.addEventListener("touchend", (e) => {
@@ -329,7 +325,6 @@
     if (Math.abs(dx) > 40) (dx > 0 ? prev() : next());
   }, { passive:true });
 
-  // Keyboard
   window.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft") prev();
     if (e.key === "ArrowRight") next();
@@ -366,18 +361,15 @@
 
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Accept": "application/json" },
         body: formData
       });
 
-      const data = await res.json().catch(() => ({}));
+      const data = await res.json();
 
       if (res.ok) {
         result.textContent = "✅ Sent!";
         alert("Your order has been submitted!\nTracking Number: " + tracking);
-
-        // ✅ Redirect to your tracking page (change filename if needed)
-        window.location.href = `tracking.html?code=${encodeURIComponent(tracking)}`;
+        window.location.href = "track.html?code=" + encodeURIComponent(tracking);
       } else {
         result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
         submitted = false;

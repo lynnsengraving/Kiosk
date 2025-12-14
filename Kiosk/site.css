@@ -1,5 +1,5 @@
 /*─────────────────────────────────────────────
-  Lynn’s Engraving Kiosk Theme v1.2 (FIXED)
+  Lynn’s Engraving Kiosk Theme v1.2
   Boutique Color Palette: Walnut, Cream, Black
   Optimized for Touch + Kiosk Displays
   Updated: December 2025
@@ -14,7 +14,6 @@
 
 /* GLOBAL RESET */
 * { box-sizing: border-box; }
-html, body { height: 100%; }
 
 /* BODY */
 body {
@@ -25,16 +24,10 @@ body {
   padding: 0;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
-/*─────────────────────────────────────────────
-  HEADERS / MAIN (Support HTML + Blazor layout)
-──────────────────────────────────────────────*/
-
-/* Your Blazor layout uses .kiosk-header / .kiosk-main */
-.kiosk-header,
-header.kiosk-header {
+/* HEADER */
+header {
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -48,38 +41,14 @@ header.kiosk-header {
   box-shadow: 0 3px 8px var(--shadow);
 }
 
-/* If you still use plain <header> on static pages, keep it too */
-header:not(.kiosk-header) {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background-color: var(--walnut);
-  color: var(--cream);
-  padding: 1.4rem 0;
-  text-align: center;
-  font-weight: 800;
-  font-size: 1.8rem;
-  letter-spacing: 1px;
-  box-shadow: 0 3px 8px var(--shadow);
-}
-
-.kiosk-main,
-main.kiosk-main {
+/* MAIN WRAPPER */
+main {
   max-width: 1000px;
   margin: auto;
   padding: 1.5rem 1rem 2.5rem;
 }
 
-/* If static pages use plain <main> */
-main:not(.kiosk-main) {
-  max-width: 1000px;
-  margin: auto;
-  padding: 1.5rem 1rem 2.5rem;
-}
-
-/*─────────────────────────────────────────────
-  BUTTON GRID
-──────────────────────────────────────────────*/
+/* BUTTON GRID (Home / Admin / Other) */
 .button-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -88,12 +57,9 @@ main:not(.kiosk-main) {
   justify-items: center;
 }
 
-/*─────────────────────────────────────────────
-  BUTTONS (works for <button> and <a class="btn">)
-──────────────────────────────────────────────*/
-.btn,
-button.btn,
-button {
+/* BUTTONS */
+button,
+.btn {
   width: 100%;
   padding: 1.3rem;
   background-color: var(--walnut);
@@ -108,16 +74,8 @@ button {
   letter-spacing: 0.5px;
 }
 
-/* Make anchor buttons behave properly */
-a.btn {
-  display: block;
-  text-decoration: none;
-  text-align: center;
-}
-
-/* Hover */
-.btn:hover,
-button:hover {
+button:hover,
+.btn:hover {
   background-color: var(--cream);
   color: var(--walnut);
   transform: translateY(-3px);
@@ -125,45 +83,13 @@ button:hover {
   outline: 2px solid var(--walnut);
 }
 
-/* Active */
-.btn:active,
 button:active { transform: scale(0.98); }
 
-/* Focus (kiosk accessibility) */
-.btn:focus-visible,
-button:focus-visible,
-a.btn:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 3px solid rgba(92, 64, 51, 0.55);
-  outline-offset: 2px;
-}
+/* LINK BUTTON FIX */
+a.btn,
+a button { text-decoration: none; }
 
-/* Secondary */
-.btn.secondary { background: #222; }
-.btn.secondary:hover {
-  background: #444;
-  color: #fff;
-  outline: none;
-}
-
-/* Disabled */
-.btn:disabled,
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* IMPORTANT: remove invalid HTML pattern styles
-   DO NOT use <a><button>..</button></a>
-*/
-a button { all: unset; } /* prevents nested button CSS issues if it exists somewhere */
-
-/*─────────────────────────────────────────────
-  CARDS / FORMS
-──────────────────────────────────────────────*/
+/* CARDS (Forms / Info Panels) */
 .card,
 form {
   background: #ffffff;
@@ -175,6 +101,7 @@ form {
   text-align: left;
 }
 
+/* HEADINGS */
 h1, h2, h3 {
   color: var(--walnut);
   margin-top: 0;
@@ -200,7 +127,6 @@ select {
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 1rem;
-  background: #fff;
 }
 
 textarea {
@@ -209,8 +135,10 @@ textarea {
 }
 
 /*─────────────────────────────────────────────
-  SLIDESHOW / CAROUSEL POSITIONING
+  FIXES: SLIDESHOW / CAROUSEL POSITIONING
 ──────────────────────────────────────────────*/
+
+/* SLIDESHOW / CAROUSEL CONTAINERS */
 .slideshow-container,
 .carousel {
   max-width: 720px;
@@ -219,36 +147,42 @@ textarea {
   overflow: hidden;
   background: #000;
   box-shadow: 0 4px 12px var(--shadow);
-  position: relative;
+  position: relative; /* ✅ required so arrows overlay correctly */
 }
 
-/* slideshow pages */
-.slide { display: none; }
+/* Slides hidden by default (JS will show active) */
+.slide { display: none; } /* ✅ important for slideshow pages */
 
 /* Images */
 .slide img,
 .carousel-image {
   width: 100%;
-  height: 320px;          /* consistent kiosk size */
-  object-fit: cover;      /* prevents stretching */
+  height: auto;
   border-radius: 10px;
   user-select: none;
   -webkit-user-drag: none;
-  display: block;
-  background: #000;
 }
 
-/* carousel pages with fixed area */
-.carousel { aspect-ratio: 16 / 9; }
-.carousel-image { display: none; height: 100%; }
-.carousel-image.active { display: block; }
+/* If you use the carousel with fixed area, this keeps images from stretching */
+.carousel {
+  aspect-ratio: 16 / 9;   /* ✅ works great for kiosk screens */
+}
+.carousel-image {
+  height: 100%;
+  object-fit: cover;      /* ✅ prevents squish */
+  display: none;
+}
+.carousel-image.active {
+  display: block;
+}
 
 /*─────────────────────────────────────────────
-  ARROWS
+  FIXES: ARROWS (SLIDESHOW + CAROUSEL)
 ──────────────────────────────────────────────*/
+
 .prev,
 .next {
-  position: absolute;
+  position: absolute;   /* ✅ overlay on image */
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
@@ -277,15 +211,15 @@ textarea {
 }
 
 /*─────────────────────────────────────────────
-  DOTS
+  DOTS (SLIDESHOW + CAROUSEL)
 ──────────────────────────────────────────────*/
+
 .dots,
 .carousel-dots {
   display: flex;
   justify-content: center;
   gap: 0.45rem;
   margin-top: 10px;
-  flex-wrap: wrap;
 }
 
 .dot,
@@ -307,6 +241,14 @@ textarea {
 .home-btn {
   margin-top: 30px;
   text-align: center;
+}
+
+/* ADMIN / SECONDARY BUTTON */
+.btn.secondary { background: #222; }
+.btn.secondary:hover {
+  background: #444;
+  color: #fff;
+  outline: none;
 }
 
 /* FOOTER (Optional) */

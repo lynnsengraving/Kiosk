@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drinkware - Lynn’s Engraving</title>
 
-  <!-- IMPORTANT: GitHub Pages path -->
-  <base href="/Kiosk/Kiosk/">
-
   <style>
     :root{
       --walnut:#5C4033;
@@ -32,6 +29,7 @@
       color:var(--walnut);
     }
 
+    /* Slideshow (kiosk size) */
     .slideshow-container{
       width:520px;
       max-width:calc(100vw - 40px);
@@ -57,6 +55,7 @@
       background:#000;
     }
 
+    /* Arrows */
     .nav-btn{
       cursor:pointer;
       position:absolute;
@@ -76,6 +75,7 @@
     .nav-prev{ left:10px; }
     .nav-next{ right:10px; }
 
+    /* Dots */
     .dots{
       display:flex;
       justify-content:center;
@@ -91,8 +91,10 @@
       background:rgba(0,0,0,0.25);
       cursor:pointer;
     }
+
     .dot.active{ background:var(--walnut); }
 
+    /* Form */
     form{
       background:#fff;
       padding:20px;
@@ -132,7 +134,10 @@
       box-sizing:border-box;
     }
 
-    textarea{ resize:vertical; min-height:120px; }
+    textarea{
+      resize:vertical;
+      min-height:120px;
+    }
 
     .btn{
       width:100%;
@@ -147,8 +152,6 @@
       cursor:pointer;
       transition:0.2s ease;
       box-shadow:0 4px 8px var(--shadow);
-      display:block;
-      text-align:center;
     }
 
     .btn:hover{
@@ -157,27 +160,16 @@
       outline:2px solid var(--walnut);
     }
 
-    .btn:disabled{
-      opacity:0.6;
-      cursor:not-allowed;
-      outline:none;
-    }
-
     .home-btn{
       max-width:520px;
       margin:14px auto 0 auto;
       text-align:center;
     }
 
+    /* Link styled like button (no <a><button>) */
     .btn-link{
       display:block;
       text-decoration:none;
-    }
-
-    #result{
-      text-align:center;
-      font-weight:800;
-      margin-top:10px;
     }
   </style>
 </head>
@@ -187,6 +179,7 @@
 <header>Lynn’s Engraving Kiosk – Drinkware</header>
 
 <div class="slideshow-container" id="slideshow">
+  <!-- ✅ Correct paths: Drinkware.html is inside Kiosk/ -->
   <div class="slide"><img src="Images/mb33.webp" alt="Drinkware 1"></div>
   <div class="slide"><img src="Images/mb34.jpeg" alt="Drinkware 2"></div>
   <div class="slide"><img src="Images/mb35.jpeg" alt="Drinkware 3"></div>
@@ -202,22 +195,26 @@
 
 <div class="dots" id="dotsWrap"></div>
 
-<!-- AJAX submit so we can generate tracking + redirect correctly -->
-<form id="orderForm" enctype="multipart/form-data">
+<form id="orderForm"
+      action="https://formsubmit.co/lynnsengraving24@gmail.com"
+      method="POST"
+      enctype="multipart/form-data">
+
+  <input type="hidden" name="tracking" id="trackingField" value="">
   <input type="hidden" name="_subject" value="New Drinkware Order">
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_autoresponse" value="Thank you for your Drinkware order! We will contact you shortly.">
-  <input type="hidden" name="tracking" id="trackingField" value="">
+  <input type="hidden" name="_next" value="track.html">
 
   <h2>Order Drinkware</h2>
   <p>Please fill out the form below.</p>
 
   <label>Your Name</label>
-  <input type="text" name="name" autocomplete="name" required>
+  <input type="text" name="name" required>
 
   <label>Your Email</label>
-  <input type="email" name="email" autocomplete="email" required>
+  <input type="email" name="email" required>
 
   <label>Engraving Text</label>
   <textarea name="engraving" required></textarea>
@@ -228,8 +225,7 @@
   <label>Additional Notes</label>
   <textarea name="notes"></textarea>
 
-  <button class="btn" id="submitBtn" type="submit">Submit Order</button>
-  <div id="result"></div>
+  <button class="btn" type="submit">Submit Order</button>
 </form>
 
 <div class="home-btn">
@@ -238,7 +234,6 @@
 
 <script>
 (function () {
-  // ===== Slideshow =====
   const slideshow = document.getElementById("slideshow");
   const dotsWrap = document.getElementById("dotsWrap");
   const prevBtn = document.getElementById("prevBtn");
@@ -248,18 +243,22 @@
   const intervalMs = 4000;
   let timer = null;
 
-  function getSlides() { return Array.from(document.getElementsByClassName("slide")); }
+  function getSlides() {
+    return Array.from(document.getElementsByClassName("slide"));
+  }
 
+  // ✅ Remove broken images automatically
   function wireImageErrors() {
     getSlides().forEach((slide) => {
       const img = slide.querySelector("img");
       if (!img) return;
+
       img.addEventListener("error", () => {
         slide.remove();
         const s = getSlides();
         if (!s.length) {
           dotsWrap.innerHTML = "";
-          stopTimer();
+          clearInterval(timer);
           return;
         }
         slideIndex = Math.min(slideIndex, s.length - 1);
@@ -283,9 +282,12 @@
   function render() {
     const slides = getSlides();
     const dots = Array.from(dotsWrap.getElementsByClassName("dot"));
+
     slides.forEach(s => s.style.display = "none");
     dots.forEach(d => d.classList.remove("active"));
+
     if (!slides.length) return;
+
     slides[slideIndex].style.display = "block";
     if (dots[slideIndex]) dots[slideIndex].classList.add("active");
   }
@@ -293,6 +295,7 @@
   function goTo(i) {
     const slides = getSlides();
     if (!slides.length) return;
+
     slideIndex = (i + slides.length) % slides.length;
     render();
     resetTimer();
@@ -301,28 +304,24 @@
   function next(){ goTo(slideIndex + 1); }
   function prev(){ goTo(slideIndex - 1); }
 
-  function stopTimer(){
-    if (timer) clearInterval(timer);
-    timer = null;
-  }
-
   function resetTimer() {
-    stopTimer();
+    clearInterval(timer);
     timer = setInterval(next, intervalMs);
   }
 
+  // Buttons
   prevBtn.addEventListener("click", prev);
   nextBtn.addEventListener("click", next);
 
-  // Pause on hover
-  slideshow.addEventListener("mouseenter", stopTimer);
-  slideshow.addEventListener("mouseleave", resetTimer);
-
   // Swipe
   let startX = 0;
-  slideshow.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
+  slideshow.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+
   slideshow.addEventListener("touchend", (e) => {
-    const dx = e.changedTouches[0].clientX - startX;
+    const endX = e.changedTouches[0].clientX;
+    const dx = endX - startX;
     if (Math.abs(dx) > 40) (dx > 0 ? prev() : next());
   }, { passive: true });
 
@@ -332,62 +331,24 @@
     if (e.key === "ArrowRight") next();
   });
 
-  wireImageErrors();
-  buildDots();
-  render();
-  resetTimer();
-
-  // ===== FormSubmit via AJAX (lets us generate tracking + redirect) =====
+  // Tracking + prevent double submit
   const form = document.getElementById("orderForm");
-  const submitBtn = document.getElementById("submitBtn");
-  const result = document.getElementById("result");
   let submitted = false;
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  form.addEventListener("submit", function () {
     if (submitted) return;
+    submitted = true;
 
     const tracking = "DW-" + Math.floor(100000 + Math.random() * 900000);
     document.getElementById("trackingField").value = tracking;
 
-    submitted = true;
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Sending…";
-    result.textContent = "Please wait…";
-
-    try {
-      const formData = new FormData(form);
-
-      const res = await fetch("https://formsubmit.co/ajax/lynnsengraving24@gmail.com", {
-        method: "POST",
-        headers: { "Accept": "application/json" },
-        body: formData
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Your order has been submitted!\nTracking Number: " + tracking);
-        result.textContent = "✅ Sent! Redirecting to tracking…";
-
-        // Change tracking page filename here if yours is different
-        setTimeout(() => {
-          window.location.href = `tracking.html?code=${encodeURIComponent(tracking)}`;
-        }, 900);
-
-      } else {
-        result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
-        submitted = false;
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Order";
-      }
-    } catch (err) {
-      result.textContent = "❌ Not sent: Network/blocked request.";
-      submitted = false;
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Submit Order";
-    }
+    alert("Your order has been submitted!\nTracking Number: " + tracking);
   });
+
+  // Init
+  wireImageErrors();
+  buildDots();
+  render();
+  resetTimer();
 })();
 </script>
 

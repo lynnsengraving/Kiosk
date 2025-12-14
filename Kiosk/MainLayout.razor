@@ -1,20 +1,9 @@
 @inherits LayoutComponentBase
 
-<div class="kiosk-layout">
+<header class="kiosk-header">
+    Lynn’s Engraving Kiosk
+</header>
 
-    <header class="kiosk-header" role="banner">
-        Lynn’s Engraving Kiosk
-    </header>
-
-    <main class="kiosk-main" role="main">
-        @Body
-    </main>
-
-    <!-- Global error UI (required by Blazor) -->
-    <div id="blazor-error-ui" hidden>
-        <span>An unexpected error has occurred.</span>
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">✖</a>
-    </div>
-
-</div>
+<main class="kiosk-main">
+    @Body
+</main>

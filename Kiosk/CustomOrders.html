@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Orders - Lynn’s Engraving</title>
 
-  <!-- IMPORTANT: GitHub Pages path -->
-  <base href="/Kiosk/Kiosk/">
-
   <style>
     :root{
       --walnut:#5C4033;
@@ -42,7 +39,6 @@
       border-radius:12px;
       box-shadow:0 0 12px rgba(0,0,0,0.25);
       touch-action:pan-y;
-      overflow:hidden;
     }
 
     .slide{ display:none; }
@@ -154,13 +150,6 @@
       text-align:center;
     }
     .home-btn a{ text-decoration:none; display:block; }
-
-    .hint{
-      text-align:center;
-      margin:10px 0 0 0;
-      font-size:13px;
-      color:#555;
-    }
   </style>
 </head>
 
@@ -168,17 +157,16 @@
 
 <header>Lynn’s Engraving Kiosk – Custom Orders</header>
 
-<div class="slideshow-container" id="slideshow" aria-label="Custom order image carousel">
+<div class="slideshow-container" id="slideshow">
   <div class="slide"><img src="Images/mb41.webp" alt="Custom Order Example 1"></div>
   <div class="slide"><img src="Images/mb43.jpg"  alt="Custom Order Example 2"></div>
   <div class="slide"><img src="Images/mb44.webp" alt="Custom Order Example 3"></div>
 
-  <button class="nav-btn nav-prev" type="button" aria-label="Previous image" id="prevBtn">❮</button>
-  <button class="nav-btn nav-next" type="button" aria-label="Next image" id="nextBtn">❯</button>
+  <button class="nav-btn nav-prev" type="button" aria-label="Previous" onclick="prev()">❮</button>
+  <button class="nav-btn nav-next" type="button" aria-label="Next" onclick="next()">❯</button>
 </div>
 
 <div class="dots" id="dots"></div>
-<div class="hint">Swipe on mobile • Auto-plays every 4 seconds (pauses on hover)</div>
 
 <form id="orderForm">
   <!-- ✅ Web3Forms -->
@@ -228,76 +216,30 @@
 </div>
 
 <script>
-  // -------------------------
-  // Carousel / Slideshow
-  // -------------------------
+  // Slideshow
   let index = 0;
   const slides = document.querySelectorAll(".slide");
   const dotsWrap = document.getElementById("dots");
-  const slideshow = document.getElementById("slideshow");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
 
   slides.forEach((_, i) => {
     const d = document.createElement("span");
     d.className = "dot";
-    d.addEventListener("click", () => show(i, true));
+    d.addEventListener("click", () => show(i));
     dotsWrap.appendChild(d);
   });
 
-  function show(i, userAction=false){
+  function show(i){
     slides.forEach(s => s.style.display="none");
     document.querySelectorAll(".dot").forEach(d => d.classList.remove("active"));
     index = (i + slides.length) % slides.length;
     slides[index].style.display="block";
     dotsWrap.children[index].classList.add("active");
-
-    if (userAction) restartAuto();
   }
-
-  function next(){ show(index + 1, true); }
-  function prev(){ show(index - 1, true); }
-
-  prevBtn.addEventListener("click", prev);
-  nextBtn.addEventListener("click", next);
-
-  // Auto-play
-  let timer = null;
-  function startAuto(){
-    stopAuto();
-    timer = setInterval(() => show(index + 1), 4000);
-  }
-  function stopAuto(){
-    if (timer) clearInterval(timer);
-    timer = null;
-  }
-  function restartAuto(){ startAuto(); }
-
-  // Pause on hover
-  slideshow.addEventListener("mouseenter", stopAuto);
-  slideshow.addEventListener("mouseleave", startAuto);
-
-  // Swipe support
-  let startX = 0;
-  slideshow.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-  }, { passive: true });
-
-  slideshow.addEventListener("touchend", (e) => {
-    const endX = e.changedTouches[0].clientX;
-    const diff = endX - startX;
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) prev();
-      else next();
-    }
-  }, { passive: true });
-
+  function next(){ show(index + 1); }
+  function prev(){ show(index - 1); }
   show(0);
-  startAuto();
 
-  // -------------------------
   // Form submit (Web3Forms)
-  // -------------------------
   const form = document.getElementById("orderForm");
   const result = document.getElementById("result");
   const btn = document.getElementById("submitBtn");
@@ -326,14 +268,10 @@
       const data = await res.json();
 
       if (res.ok) {
-        result.textContent = "✅ Sent! Redirecting to your tracking page…";
-
-        // Redirect to your tracking page (change filename if needed)
-        // Example: tracking.html?code=CO-123456
-        setTimeout(() => {
-          window.location.href = `tracking.html?code=${encodeURIComponent(tracking)}`;
-        }, 900);
-
+        result.textContent = "✅ Sent! Check your email for confirmation.";
+        alert(`Order submitted!\nTracking Number: ${tracking}`);
+        form.reset();
+        show(0);
       } else {
         result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
         btn.disabled = false;

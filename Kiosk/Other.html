@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Other - Lynn’s Engraving</title>
 
-  <!-- IMPORTANT: GitHub Pages path -->
-  <base href="/Kiosk/Kiosk/">
+  <!-- Optional: keep your site.css if you want shared styling -->
+  <!-- <link rel="stylesheet" href="site.css" /> -->
 
   <style>
     :root{
@@ -62,7 +62,6 @@
       line-height:1.5;
     }
 
-    /* Make <a> look like your button */
     .btn{
       display:block;
       width:100%;
@@ -78,7 +77,6 @@
       cursor:pointer;
       box-shadow:0 4px 8px var(--shadow);
       transition:0.25s ease;
-      text-decoration:none;
     }
 
     .btn:hover{
@@ -96,6 +94,8 @@
       color:#fff;
       outline:none;
     }
+
+    a { text-decoration:none; }
   </style>
 </head>
 
@@ -112,14 +112,14 @@
       If you have a unique idea, we’re happy to help.
     </p>
 
-    <!-- Custom Orders -->
-    <a class="btn secondary" href="CustomOrders.html">Start a Custom Request</a>
+    <!-- If CustomOrders.html is in the SAME folder as this page -->
+    <a href="CustomOrders.html"><button class="btn secondary">Start a Custom Request</button></a>
 
-    <!-- Tracking -->
-    <a class="btn" href="tracking.html">Track an Order</a>
+    <!-- Optional: link to tracking page -->
+    <a href="track.html"><button class="btn">Track an Order</button></a>
 
-    <!-- Home -->
-    <a class="btn" href="index.html">Return to Kiosk Home</a>
+    <!-- Back to home -->
+    <a href="index.html"><button class="btn">Return to Kiosk Home</button></a>
   </div>
 </main>
 
