@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Order Tracking – Lynn’s Engraving</title>
 
-  <!-- IMPORTANT: Your GitHub Pages path is /Kiosk/Kiosk/ -->
+  <!-- IMPORTANT: GitHub Pages path -->
   <base href="/Kiosk/Kiosk/">
 
   <style>
@@ -69,6 +69,7 @@
     .error { color: #b00020; font-weight: 700; }
     .success { color: #0b6b0b; font-weight: 700; }
     .muted { color: #666; font-size: 14px; margin-top: 8px; text-align: center; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
   </style>
 </head>
 
@@ -86,16 +87,20 @@
 
   <div id="result" class="result">
     <div class="muted">
-      Tip: If you just submitted an order, your tracking code may look like <b>MB-123456</b>.
+      Tip: Tracking codes may look like <b>MB-123456</b>, <b>DT-123456</b>, <b>DW-123456</b>, <b>PL-123456</b>, <b>FR-123456</b>, or <b>CO-123456</b>.
     </div>
   </div>
 
   <script>
     // ✅ Demo tracking "database" (replace later with real system)
+    // Added multiple prefixes so your other order pages won't always fail "not found"
     const orders = {
       "MB-966194": { name: "Custom Memorial Band", status: "In Production", updated: "December 14, 2025" },
-      "MB-123456": { name: "Engraved Frame",      status: "Shipped",       updated: "December 12, 2025" },
-      "MB-907918": { name: "Custom Engraved Item",status: "Processing",    updated: "December 14, 2025" }
+      "FR-123456": { name: "Engraved Frame",      status: "Shipped",       updated: "December 12, 2025" },
+      "PL-907918": { name: "Custom Plaque",       status: "Processing",    updated: "December 14, 2025" },
+      "DW-445512": { name: "Engraved Drinkware",  status: "Processing",    updated: "December 14, 2025" },
+      "DT-778801": { name: "Dog Tags",            status: "In Production", updated: "December 14, 2025" },
+      "CO-662210": { name: "Custom Order",        status: "Received",      updated: "December 14, 2025" }
     };
 
     const inputEl  = document.getElementById("trackingInput");
@@ -107,31 +112,49 @@
     function renderDefaultTip() {
       resultEl.innerHTML = `
         <div class="muted">
-          Tip: If you just submitted an order, your tracking code may look like <b>MB-123456</b>.
+          Tip: Tracking codes may look like <b>MB-123456</b>, <b>DT-123456</b>, <b>DW-123456</b>, <b>PL-123456</b>, <b>FR-123456</b>, or <b>CO-123456</b>.
         </div>
       `;
     }
 
+    function normalizeCode(raw) {
+      return (raw || "")
+        .trim()
+        .toUpperCase()
+        .replace(/\s+/g, ""); // remove spaces
+    }
+
+    function setUrlCode(code) {
+      // update the address bar to ?code=XXXX without reloading
+      if (window.history && window.history.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("code", code);
+        window.history.replaceState({}, "", url.toString());
+      }
+    }
+
     function checkStatus() {
-      const code = (inputEl.value || "").trim().toUpperCase();
+      const code = normalizeCode(inputEl.value);
 
       if (!code) {
         resultEl.innerHTML = `<div class="error">Please enter a tracking number.</div>`;
         return;
       }
 
+      setUrlCode(code);
+
       const order = orders[code];
       if (!order) {
         resultEl.innerHTML = `
           <div class="error">Tracking number not found.</div>
-          <div class="muted">Entered: <b>${code}</b></div>
+          <div class="muted">Entered: <b class="mono">${code}</b></div>
         `;
         return;
       }
 
       resultEl.innerHTML = `
         <div class="success">✅ Tracking Found</div>
-        <div style="margin-top:10px;"><strong>Tracking Number:</strong> ${code}</div>
+        <div style="margin-top:10px;"><strong>Tracking Number:</strong> <span class="mono">${code}</span></div>
         <div><strong>Item:</strong> ${order.name}</div>
         <div><strong>Status:</strong> ${order.status}</div>
         <div><strong>Last Updated:</strong> ${order.updated}</div>
@@ -152,10 +175,8 @@
     }
 
     function goHome() {
-      // because we set <base href="/Kiosk/Kiosk/">, this resolves correctly
-      window.location.href = "index.html";
-      // If you prefer absolute, use:
-      // window.location.href = "https://lynnsengraving.github.io/Kiosk/Kiosk/index.html";
+      // Prefer absolute to avoid routing weirdness on GitHub Pages
+      window.location.href = "/Kiosk/Kiosk/index.html";
     }
 
     // Buttons
@@ -168,11 +189,19 @@
       if (e.key === "Enter") checkStatus();
     });
 
+    // Auto-uppercase as user types (keeps cursor position stable)
+    inputEl.addEventListener("input", () => {
+      const start = inputEl.selectionStart;
+      const end = inputEl.selectionEnd;
+      inputEl.value = inputEl.value.toUpperCase();
+      inputEl.setSelectionRange(start, end);
+    });
+
     // ✅ AUTO-LOAD TRACKING CODE FROM URL (?code=MB-123456)
     const params = new URLSearchParams(window.location.search);
     const codeFromUrl = params.get("code");
     if (codeFromUrl) {
-      inputEl.value = codeFromUrl.toUpperCase();
+      inputEl.value = normalizeCode(codeFromUrl);
       checkStatus();
     }
   </script>
