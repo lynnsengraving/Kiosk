@@ -1,97 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Track Your Order - Lynn’s Engraving</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Tracking – Lynn’s Engraving</title>
 
-<style>
+  <style>
     body {
-        font-family: Arial, sans-serif;
-        background: #f6f6f6;
-        padding: 40px;
-        text-align: center;
+      font-family: Arial, sans-serif;
+      background: #FFF8E7;
+      color: #333;
+      text-align: center;
+      padding: 40px 16px;
     }
 
-    h1 {
-        font-size: 32px;
-        margin-bottom: 20px;
-    }
-
-    .track-box {
-        background: white;
-        max-width: 400px;
-        margin: auto;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.15);
-    }
+    h1 { color: #5C4033; margin-bottom: 8px; }
+    p { margin-top: 0; }
 
     input {
-        width: 100%;
-        padding: 12px;
-        margin-top: 10px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
+      padding: 10px;
+      width: 260px;
+      max-width: 100%;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      text-transform: uppercase;
     }
 
     button {
-        margin-top: 15px;
-        width: 100%;
-        padding: 12px;
-        background: black;
-        color: white;
-        border: none;
-        font-size: 16px;
-        border-radius: 6px;
-        cursor: pointer;
+      padding: 10px 16px;
+      font-size: 16px;
+      margin: 6px;
+      cursor: pointer;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: #fff;
     }
 
-    button:hover {
-        background: #444;
+    .home-btn {
+      background: #5C4033;
+      color: #FFF8E7;
+      border: none;
     }
 
-    .status-box {
-        margin-top: 25px;
-        font-size: 20px;
-        font-weight: bold;
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      background: #fff;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.12);
+      text-align: left;
     }
-</style>
+
+    .error { color: #b00020; font-weight: 700; }
+    .muted { color: #666; font-size: 14px; margin-top: 8px; text-align: center; }
+  </style>
 </head>
+
 <body>
 
-<h1>Track Your Order</h1>
+<h1>Thank You for Your Order!</h1>
+<p>Enter your tracking number to see your order status.</p>
 
-<div class="track-box">
-    <p>Enter your tracking number below:</p>
+<input id="trackingInput" placeholder="Ex: MB-966194" autocomplete="off" />
+<br>
 
-    <input id="trackingInput" type="text" placeholder="Example: MB-724193"/>
+<button id="checkBtn" type="button">Check Status</button>
+<button class="home-btn" id="homeBtn" type="button">Home</button>
 
-    <button onclick="checkStatus()">Check Status</button>
-
-    <div id="status" class="status-box"></div>
+<div id="result" class="result">
+  <div class="muted">
+    Tip: If you just submitted an order, your tracking code may look like <b>MB-123456</b>.
+  </div>
 </div>
 
 <script>
-// Editable status list
-// Lynn can update these values anytime
-const trackingStatuses = {
-    "MB-111111": "Received",
-    "MB-222222": "In Progress",
-    "MB-333333": "Engraving Complete",
-    "MB-444444": "Ready for Pickup",
-    "MB-555555": "Shipped"
-};
+  // Demo tracking database
+  const orders = {
+    "MB-966194": { name: "Custom Memorial Band", status: "In Production", updated: "December 14, 2025" },
+    "MB-123456": { name: "Engraved Frame", status: "Shipped", updated: "December 12, 2025" },
+    "MB-907918": { name: "Custom Engraved Item", status: "Processing", updated: "December 14, 2025" }
+  };
 
-function checkStatus() {
-    const code = document.getElementById("trackingInput").value.trim();
-    const statusBox = document.getElementById("status");
+  const inputEl = document.getElementById("trackingInput");
+  const resultEl = document.getElementById("result");
 
-    if (trackingStatuses[code]) {
-        statusBox.innerHTML = "Status: " + trackingStatuses[code];
-    } else {
-        statusBox.innerHTML = "Tracking number not found.";
+  function checkStatus() {
+    const code = inputEl.value.trim().toUpperCase();
+
+    if (!code) {
+      resultEl.innerHTML = `<div class="error">Please enter a tracking number.</div>`;
+      return;
     }
-}
+
+    const order = orders[code];
+    if (!order) {
+      resultEl.innerHTML = `
+        <div class="error">Tracking number not found.</div>
+        <div class="muted">Entered: <b>${code}</b></div>
+      `;
+      return;
+    }
+
+    resultEl.innerHTML = `
+      <div><strong>Tracking Number:</strong> ${code}</div>
+      <div><strong>Item:</strong> ${order.name}</div>
+      <div><strong>Status:</strong> ${order.status}</div>
+      <div><strong>Last Updated:</strong> ${order.updated}</div>
+    `;
+  }
+
+  function goHome() {
+    window.location.href = "https://lynnsengraving.github.io/Kiosk/index.html";
+  }
+
+  document.getElementById("checkBtn").addEventListener("click", checkStatus);
+  document.getElementById("homeBtn").addEventListener("click", goHome);
+
+  inputEl.addEventListener("keydown", e => {
+    if (e.key === "Enter") checkStatus();
+  });
+
+  // Auto-load tracking code from URL
+  const params = new URLSearchParams(window.location.search);
+  const codeFromUrl = params.get("code");
+  if (codeFromUrl) {
+    inputEl.value = codeFromUrl.toUpperCase();
+    checkStatus();
+  }
 </script>
 
 </body>
