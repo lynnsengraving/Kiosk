@@ -177,6 +177,7 @@
       text-align:center;
       margin-top:10px;
       font-weight:800;
+      min-height: 22px;
     }
   </style>
 </head>
@@ -201,18 +202,14 @@
 
 <div class="dots" id="dotsWrap"></div>
 
-<!-- ✅ Web3Forms form (NO action needed; we submit with fetch) -->
 <form id="orderForm" enctype="multipart/form-data">
-  <!-- REQUIRED -->
   <input type="hidden" name="access_key" value="ac2a3a1e-0b8f-4460-ae85-3e63a64a377d">
 
-  <!-- Helpful metadata -->
   <input type="hidden" name="from_name" value="Lynn’s Engraving Kiosk">
   <input type="hidden" name="replyto" id="replyto">
   <input type="hidden" name="subject" id="subject">
   <input type="hidden" name="order_type" value="Memorial Band">
 
-  <!-- Tracking -->
   <input type="hidden" name="tracking" id="trackingField" value="">
 
   <h2>Order a Memorial Band</h2>
@@ -243,6 +240,9 @@
 
 <script>
 (function () {
+  // ✅ Your real home page URL on GitHub Pages
+  const HOME_URL = "https://lynnsengraving.github.io/Kiosk/index.html";
+
   // ===== Slideshow =====
   const slideshow = document.getElementById("slideshow");
   const dotsWrap = document.getElementById("dotsWrap");
@@ -320,13 +320,12 @@
     if (e.key === "ArrowRight") next();
   });
 
-  // Init slideshow
   wireImageErrors();
   buildDots();
   render();
   resetTimer();
 
-  // ===== Web3Forms Submit (supports file upload) =====
+  // ===== Web3Forms Submit =====
   const form = document.getElementById("orderForm");
   const submitBtn = document.getElementById("submitBtn");
   const result = document.getElementById("result");
@@ -337,7 +336,6 @@
     e.preventDefault();
     if (submitted) return;
 
-    // Tracking + email metadata
     const tracking = "MB-" + Math.floor(100000 + Math.random() * 900000);
     document.getElementById("trackingField").value = tracking;
     document.getElementById("replyto").value = form.email.value;
@@ -359,11 +357,18 @@
       const data = await res.json();
 
       if (res.ok) {
-        result.textContent = "✅ Sent!";
+        // ✅ Show tracking number + redirect home
+        result.textContent = `✅ Sent! Tracking Number: ${tracking} — returning home…`;
         alert("Order submitted!\nTracking Number: " + tracking);
 
-        // Redirect to tracking page with code
-        window.location.href = "track.html?code=" + encodeURIComponent(tracking);
+        // optional: reset the form before leaving
+        form.reset();
+
+        // go home after a short delay so the user sees the code
+        setTimeout(() => {
+          window.location.href = HOME_URL;
+        }, 2000);
+
       } else {
         result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
         submitted = false;

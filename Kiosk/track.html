@@ -45,6 +45,11 @@
       border: none;
     }
 
+    .clear-btn {
+      background: #eee;
+      border: 1px solid #ccc;
+    }
+
     .result {
       margin-top: 20px;
       font-size: 18px;
@@ -59,6 +64,7 @@
     }
 
     .error { color: #b00020; font-weight: 700; }
+    .success { color: #0b6b0b; font-weight: 700; }
     .muted { color: #666; font-size: 14px; margin-top: 8px; text-align: center; }
   </style>
 </head>
@@ -72,77 +78,96 @@
   <br>
 
   <button id="checkBtn" type="button">Check Status</button>
+  <button id="clearBtn" class="clear-btn" type="button">Clear</button>
   <button class="home-btn" id="homeBtn" type="button">Home</button>
 
   <div id="result" class="result">
-    <div class="muted">Tip: If you just submitted an order, your tracking code may look like <b>MB-123456</b>.</div>
+    <div class="muted">
+      Tip: If you just submitted an order, your tracking code may look like <b>MB-123456</b>.
+    </div>
   </div>
 
-<script>
-  // 🔹 Simple demo "database"
-  const orders = {
-    "MB-966194": { name: "Custom Memorial Band", status: "In Production", updated: "December 14, 2025" },
-    "MB-123456": { name: "Engraved Frame",       status: "Shipped",       updated: "December 12, 2025" },
-    "MB-907918": { name: "Custom Engraved Item", status: "Processing",    updated: "December 14, 2025" }
-  };
+  <script>
+    // ✅ Demo tracking "database" (replace later with real system)
+    const orders = {
+      "MB-966194": { name: "Custom Memorial Band", status: "In Production", updated: "December 14, 2025" },
+      "MB-123456": { name: "Engraved Frame",      status: "Shipped",       updated: "December 12, 2025" },
+      "MB-907918": { name: "Custom Engraved Item",status: "Processing",    updated: "December 14, 2025" }
+    };
 
-  const inputEl = document.getElementById("trackingInput");
-  const resultEl = document.getElementById("result");
-  const checkBtn = document.getElementById("checkBtn");
-  const homeBtn  = document.getElementById("homeBtn");
+    const inputEl  = document.getElementById("trackingInput");
+    const resultEl = document.getElementById("result");
+    const checkBtn = document.getElementById("checkBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const homeBtn  = document.getElementById("homeBtn");
 
-  function renderNotFound(code) {
-    resultEl.innerHTML = `
-      <div class="error">Tracking number not found.</div>
-      <div class="muted">Entered: <b>${code}</b></div>
-      <div class="muted">If you just placed your order, please allow a moment and try again.</div>
-    `;
-  }
-
-  function checkStatus() {
-    const code = (inputEl.value || "").trim().toUpperCase();
-
-    if (!code) {
-      resultEl.innerHTML = `<div class="error">Please enter a tracking number.</div>`;
-      return;
+    function renderDefaultTip() {
+      resultEl.innerHTML = `
+        <div class="muted">
+          Tip: If you just submitted an order, your tracking code may look like <b>MB-123456</b>.
+        </div>
+      `;
     }
 
-    const order = orders[code];
-    if (!order) {
-      renderNotFound(code);
-      return;
+    function checkStatus() {
+      const code = (inputEl.value || "").trim().toUpperCase();
+
+      if (!code) {
+        resultEl.innerHTML = `<div class="error">Please enter a tracking number.</div>`;
+        return;
+      }
+
+      const order = orders[code];
+      if (!order) {
+        resultEl.innerHTML = `
+          <div class="error">Tracking number not found.</div>
+          <div class="muted">Entered: <b>${code}</b></div>
+        `;
+        return;
+      }
+
+      resultEl.innerHTML = `
+        <div class="success">✅ Tracking Found</div>
+        <div style="margin-top:10px;"><strong>Tracking Number:</strong> ${code}</div>
+        <div><strong>Item:</strong> ${order.name}</div>
+        <div><strong>Status:</strong> ${order.status}</div>
+        <div><strong>Last Updated:</strong> ${order.updated}</div>
+      `;
     }
 
-    resultEl.innerHTML = `
-      <div><strong>Tracking Number:</strong> ${code}</div>
-      <div><strong>Item:</strong> ${order.name}</div>
-      <div><strong>Status:</strong> ${order.status}</div>
-      <div><strong>Last Updated:</strong> ${order.updated}</div>
-    `;
-  }
+    function clearForm() {
+      inputEl.value = "";
+      renderDefaultTip();
+      // remove ?code= from the address bar (optional nice touch)
+      if (window.history && window.history.replaceState) {
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, "", cleanUrl);
+      }
+      inputEl.focus();
+    }
 
-  function goHome() {
-  window.location.href = "https://lynnsengraving.github.io/Kiosk/index.html";
-}
+    function goHome() {
+      window.location.href = "https://lynnsengraving.github.io/Kiosk/index.html";
+    }
 
-  // Buttons
-  checkBtn.addEventListener("click", checkStatus);
-  homeBtn.addEventListener("click", goHome);
+    // Buttons
+    checkBtn.addEventListener("click", checkStatus);
+    clearBtn.addEventListener("click", clearForm);
+    homeBtn.addEventListener("click", goHome);
 
-  // Enter key triggers search
-  inputEl.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") checkStatus();
-  });
+    // Enter key triggers search
+    inputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkStatus();
+    });
 
-  // 🔹 AUTO-LOAD TRACKING NUMBER FROM URL (?code=MB-123456)
-  const params = new URLSearchParams(window.location.search);
-  const codeFromUrl = params.get("code");
-
-  if (codeFromUrl) {
-    inputEl.value = codeFromUrl.toUpperCase();
-    checkStatus();
-  }
-</script>
+    // ✅ AUTO-LOAD TRACKING CODE FROM URL (?code=MB-123456)
+    const params = new URLSearchParams(window.location.search);
+    const codeFromUrl = params.get("code");
+    if (codeFromUrl) {
+      inputEl.value = codeFromUrl.toUpperCase();
+      checkStatus();
+    }
+  </script>
 
 </body>
 </html>

@@ -29,7 +29,6 @@
       color:var(--walnut);
     }
 
-    /* Slideshow (kiosk size) */
     .slideshow-container{
       width:520px;
       max-width:calc(100vw - 40px);
@@ -55,7 +54,6 @@
       background:#000;
     }
 
-    /* Arrows */
     .nav-btn{
       cursor:pointer;
       position:absolute;
@@ -75,7 +73,6 @@
     .nav-prev{ left:10px; }
     .nav-next{ right:10px; }
 
-    /* Dots */
     .dots{
       display:flex;
       justify-content:center;
@@ -91,10 +88,8 @@
       background:rgba(0,0,0,0.25);
       cursor:pointer;
     }
-
     .dot.active{ background:var(--walnut); }
 
-    /* Form */
     form{
       background:#fff;
       padding:20px;
@@ -134,10 +129,7 @@
       box-sizing:border-box;
     }
 
-    textarea{
-      resize:vertical;
-      min-height:120px;
-    }
+    textarea{ resize:vertical; min-height:120px; }
 
     .btn{
       width:100%;
@@ -160,16 +152,24 @@
       outline:2px solid var(--walnut);
     }
 
+    .btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+      outline:none;
+    }
+
     .home-btn{
       max-width:520px;
       margin:14px auto 0 auto;
       text-align:center;
     }
 
-    /* ✅ Link styled like button (no <a><button>) */
-    .btn-link{
-      display:block;
-      text-decoration:none;
+    .btn-link{ display:block; text-decoration:none; }
+
+    #result{
+      text-align:center;
+      font-weight:800;
+      margin-top:10px;
     }
   </style>
 </head>
@@ -179,7 +179,6 @@
 <header>Lynn’s Engraving Kiosk – Dog Tags</header>
 
 <div class="slideshow-container" id="slideshow">
-  <!-- ✅ Correct paths: DogTags.html is inside Kiosk/ -->
   <div class="slide"><img src="Images/mb9.jpg"  alt="Dog Tags 1"></div>
   <div class="slide"><img src="Images/mb10.jpg" alt="Dog Tags 2"></div>
   <div class="slide"><img src="Images/mb11.jpg" alt="Dog Tags 3"></div>
@@ -195,26 +194,22 @@
 
 <div class="dots" id="dotsWrap"></div>
 
-<form id="orderForm"
-      action="https://formsubmit.co/lynnsengraving24@gmail.com"
-      method="POST"
-      enctype="multipart/form-data">
-
-  <input type="hidden" name="tracking" id="trackingField" value="">
+<!-- ✅ NOTE: No action/method here because we are submitting via fetch() -->
+<form id="orderForm" enctype="multipart/form-data">
   <input type="hidden" name="_subject" value="New Dog Tags Order">
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_autoresponse" value="Thank you for your Dog Tags order! We will contact you shortly.">
-  <input type="hidden" name="_next" value="track.html">
+  <input type="hidden" name="tracking" id="trackingField" value="">
 
   <h2>Order Dog Tags</h2>
   <p>Please fill out the form below.</p>
 
   <label>Your Name</label>
-  <input type="text" name="name" required>
+  <input type="text" name="name" autocomplete="name" required>
 
   <label>Your Email</label>
-  <input type="email" name="email" required>
+  <input type="email" name="email" autocomplete="email" required>
 
   <label>Engraving Text</label>
   <textarea name="engraving" required></textarea>
@@ -225,7 +220,8 @@
   <label>Additional Notes</label>
   <textarea name="notes"></textarea>
 
-  <button class="btn" type="submit">Submit Order</button>
+  <button class="btn" id="submitBtn" type="submit">Submit Order</button>
+  <div id="result"></div>
 </form>
 
 <div class="home-btn">
@@ -234,8 +230,8 @@
 
 <script>
 (function () {
+  // ===== Slideshow =====
   const slideshow = document.getElementById("slideshow");
-  const slides = Array.from(document.getElementsByClassName("slide"));
   const dotsWrap = document.getElementById("dotsWrap");
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
@@ -244,31 +240,29 @@
   const intervalMs = 4000;
   let timer = null;
 
-  // ✅ Remove broken images automatically
-  function pruneBrokenImages() {
-    slides.forEach((slide, idx) => {
+  function getSlides(){ return Array.from(document.getElementsByClassName("slide")); }
+
+  function wireImageErrors(){
+    getSlides().forEach((slide) => {
       const img = slide.querySelector("img");
       if (!img) return;
-
       img.addEventListener("error", () => {
         slide.remove();
-        // rebuild arrays safely
-        const newSlides = Array.from(document.getElementsByClassName("slide"));
-        if (!newSlides.length) {
+        const s = getSlides();
+        if (!s.length) {
           dotsWrap.innerHTML = "";
           clearInterval(timer);
           return;
         }
-        // keep index in range
-        slideIndex = Math.min(slideIndex, newSlides.length - 1);
-        buildDots(newSlides);
-        render(newSlides);
+        slideIndex = Math.min(slideIndex, s.length - 1);
+        buildDots();
+        render();
       });
     });
   }
 
-  function buildDots(currentSlides) {
-    const s = currentSlides || slides;
+  function buildDots(){
+    const s = getSlides();
     dotsWrap.innerHTML = "";
     s.forEach((_, i) => {
       const dot = document.createElement("span");
@@ -278,51 +272,42 @@
     });
   }
 
-  function render(currentSlides) {
-    const s = currentSlides || Array.from(document.getElementsByClassName("slide"));
+  function render(){
+    const s = getSlides();
     const dots = Array.from(dotsWrap.getElementsByClassName("dot"));
-
     s.forEach(sl => sl.style.display = "none");
     dots.forEach(d => d.classList.remove("active"));
-
     if (!s.length) return;
-
     s[slideIndex].style.display = "block";
     if (dots[slideIndex]) dots[slideIndex].classList.add("active");
   }
 
-  function goTo(i) {
-    const s = Array.from(document.getElementsByClassName("slide"));
+  function goTo(i){
+    const s = getSlides();
     if (!s.length) return;
-
     slideIndex = (i + s.length) % s.length;
-    render(s);
+    render();
     resetTimer();
   }
 
   function next(){ goTo(slideIndex + 1); }
   function prev(){ goTo(slideIndex - 1); }
 
-  function resetTimer() {
+  function resetTimer(){
     clearInterval(timer);
     timer = setInterval(next, intervalMs);
   }
 
-  // Buttons
   prevBtn.addEventListener("click", prev);
   nextBtn.addEventListener("click", next);
 
   // Swipe
   let startX = 0;
-  slideshow.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-  }, { passive: true });
-
+  slideshow.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive:true });
   slideshow.addEventListener("touchend", (e) => {
-    const endX = e.changedTouches[0].clientX;
-    const dx = endX - startX;
+    const dx = e.changedTouches[0].clientX - startX;
     if (Math.abs(dx) > 40) (dx > 0 ? prev() : next());
-  }, { passive: true });
+  }, { passive:true });
 
   // Keyboard
   window.addEventListener("keydown", (e) => {
@@ -330,24 +315,62 @@
     if (e.key === "ArrowRight") next();
   });
 
-  // Tracking + prevent double submit
+  wireImageErrors();
+  buildDots();
+  render();
+  resetTimer();
+
+  // ===== FormSubmit via fetch() (prevents redirect to formsubmit.co) =====
   const form = document.getElementById("orderForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const result = document.getElementById("result");
   let submitted = false;
-  form.addEventListener("submit", function () {
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
     if (submitted) return;
-    submitted = true;
 
     const tracking = "DT-" + Math.floor(100000 + Math.random() * 900000);
     document.getElementById("trackingField").value = tracking;
 
-    alert("Your order has been submitted!\nTracking Number: " + tracking);
-  });
+    submitted = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+    result.textContent = "Please wait…";
 
-  // Init
-  pruneBrokenImages();
-  buildDots();
-  render();
-  resetTimer();
+    try {
+      const formData = new FormData(form);
+
+      // ✅ REQUIRED: FormSubmit endpoint
+      const res = await fetch("https://formsubmit.co/ajax/lynnsengraving24@gmail.com", {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Your order has been submitted!\nTracking Number: " + tracking);
+
+        // ✅ go HOME after a short pause
+        result.textContent = "✅ Sent! Returning home…";
+        setTimeout(() => {
+          window.location.href = "https://lynnsengraving.github.io/Kiosk/index.html";
+        }, 800);
+      } else {
+        result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
+        submitted = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Order";
+      }
+    } catch (err) {
+      result.textContent = "❌ Not sent: Network/blocked request.";
+      submitted = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Order";
+    }
+  });
 })();
 </script>
 
