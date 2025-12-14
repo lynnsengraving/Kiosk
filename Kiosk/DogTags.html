@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dog Tags - Lynn’s Engraving</title>
 
+  <!-- IMPORTANT: GitHub Pages path -->
+  <base href="/Kiosk/Kiosk/">
+
   <style>
     :root{
       --walnut:#5C4033;
@@ -194,7 +197,6 @@
 
 <div class="dots" id="dotsWrap"></div>
 
-<!-- ✅ NOTE: No action/method here because we are submitting via fetch() -->
 <form id="orderForm" enctype="multipart/form-data">
   <input type="hidden" name="_subject" value="New Dog Tags Order">
   <input type="hidden" name="_captcha" value="false">
@@ -251,7 +253,7 @@
         const s = getSlides();
         if (!s.length) {
           dotsWrap.innerHTML = "";
-          clearInterval(timer);
+          stopTimer();
           return;
         }
         slideIndex = Math.min(slideIndex, s.length - 1);
@@ -293,13 +295,22 @@
   function next(){ goTo(slideIndex + 1); }
   function prev(){ goTo(slideIndex - 1); }
 
+  function stopTimer(){
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+
   function resetTimer(){
-    clearInterval(timer);
+    stopTimer();
     timer = setInterval(next, intervalMs);
   }
 
   prevBtn.addEventListener("click", prev);
   nextBtn.addEventListener("click", next);
+
+  // Pause on hover (kiosk friendly)
+  slideshow.addEventListener("mouseenter", stopTimer);
+  slideshow.addEventListener("mouseleave", resetTimer);
 
   // Swipe
   let startX = 0;
@@ -320,7 +331,7 @@
   render();
   resetTimer();
 
-  // ===== FormSubmit via fetch() (prevents redirect to formsubmit.co) =====
+  // ===== FormSubmit via fetch() =====
   const form = document.getElementById("orderForm");
   const submitBtn = document.getElementById("submitBtn");
   const result = document.getElementById("result");
@@ -341,7 +352,6 @@
     try {
       const formData = new FormData(form);
 
-      // ✅ REQUIRED: FormSubmit endpoint
       const res = await fetch("https://formsubmit.co/ajax/lynnsengraving24@gmail.com", {
         method: "POST",
         headers: { "Accept": "application/json" },
@@ -353,11 +363,16 @@
       if (res.ok) {
         alert("Your order has been submitted!\nTracking Number: " + tracking);
 
-        // ✅ go HOME after a short pause
-        result.textContent = "✅ Sent! Returning home…";
+        // ✅ redirect to Tracking page (recommended) OR home
+        result.textContent = "✅ Sent! Redirecting…";
         setTimeout(() => {
-          window.location.href = "https://lynnsengraving.github.io/Kiosk/index.html";
-        }, 800);
+          // If you have a tracking page:
+          // window.location.href = `tracking.html?code=${encodeURIComponent(tracking)}`;
+
+          // Otherwise go home:
+          window.location.href = "index.html";
+        }, 900);
+
       } else {
         result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
         submitted = false;
