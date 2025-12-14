@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Memorial Bands - Lynn’s Engraving</title>
 
+  <!-- IMPORTANT: GitHub Pages path -->
+  <base href="/Kiosk/Kiosk/">
+
   <style>
     :root{
       --walnut:#5C4033;
@@ -148,6 +151,7 @@
       transition:0.2s ease;
       box-shadow:0 4px 8px var(--shadow);
       text-align:center;
+      display:block;
     }
 
     .btn:hover{
@@ -209,7 +213,6 @@
   <input type="hidden" name="replyto" id="replyto">
   <input type="hidden" name="subject" id="subject">
   <input type="hidden" name="order_type" value="Memorial Band">
-
   <input type="hidden" name="tracking" id="trackingField" value="">
 
   <h2>Order a Memorial Band</h2>
@@ -240,9 +243,6 @@
 
 <script>
 (function () {
-  // ✅ Your real home page URL on GitHub Pages
-  const HOME_URL = "https://lynnsengraving.github.io/Kiosk/index.html";
-
   // ===== Slideshow =====
   const slideshow = document.getElementById("slideshow");
   const dotsWrap = document.getElementById("dotsWrap");
@@ -262,7 +262,7 @@
       img.addEventListener("error", () => {
         slide.remove();
         const s = getSlides();
-        if (!s.length) { dotsWrap.innerHTML = ""; clearInterval(timer); return; }
+        if (!s.length) { dotsWrap.innerHTML = ""; stopTimer(); return; }
         slideIndex = Math.min(slideIndex, s.length - 1);
         buildDots(); render();
       });
@@ -300,14 +300,24 @@
   function next(){ goTo(slideIndex + 1); }
   function prev(){ goTo(slideIndex - 1); }
 
+  function stopTimer(){
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+
   function resetTimer(){
-    clearInterval(timer);
+    stopTimer();
     timer = setInterval(next, intervalMs);
   }
 
   prevBtn.addEventListener("click", prev);
   nextBtn.addEventListener("click", next);
 
+  // Pause on hover
+  slideshow.addEventListener("mouseenter", stopTimer);
+  slideshow.addEventListener("mouseleave", resetTimer);
+
+  // Swipe
   let startX = 0;
   slideshow.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive:true });
   slideshow.addEventListener("touchend", (e) => {
@@ -329,7 +339,6 @@
   const form = document.getElementById("orderForm");
   const submitBtn = document.getElementById("submitBtn");
   const result = document.getElementById("result");
-
   let submitted = false;
 
   form.addEventListener("submit", async (e) => {
@@ -351,23 +360,20 @@
 
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
+        headers: { "Accept": "application/json" },
         body: formData
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        // ✅ Show tracking number + redirect home
-        result.textContent = `✅ Sent! Tracking Number: ${tracking} — returning home…`;
+        result.textContent = `✅ Sent! Tracking Number: ${tracking}`;
         alert("Order submitted!\nTracking Number: " + tracking);
 
-        // optional: reset the form before leaving
-        form.reset();
-
-        // go home after a short delay so the user sees the code
+        // Redirect to tracking page (change filename if needed)
         setTimeout(() => {
-          window.location.href = HOME_URL;
-        }, 2000);
+          window.location.href = `tracking.html?code=${encodeURIComponent(tracking)}`;
+        }, 900);
 
       } else {
         result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
