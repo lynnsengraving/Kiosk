@@ -1,15 +1,254 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>DogTags - Lynn’s Engraving</title>
-  <link rel="stylesheet" href="../site.css" />
+<meta charset="UTF-8">
+<title>Dog Tags - Lynn’s Engraving</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f6f6f6;
+        color: #333;
+        text-align: center;
+    }
+
+    header {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+
+    /* Slideshow (reduced size for kiosk) */
+    .slideshow-container {
+        width: 500px;
+        position: relative;
+        margin: 0 auto 30px auto;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        padding: 10px;
+        box-shadow: 0 0 12px rgba(0,0,0,0.25);
+    }
+
+    .slide {
+        display: none;
+    }
+
+    .slide img {
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    /* Arrows */
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        padding: 12px;
+        margin-top: -25px;
+        color: white;
+        background: rgba(0,0,0,0.5);
+        font-size: 30px;
+        font-weight: bold;
+        border-radius: 6px;
+        user-select: none;
+    }
+
+    .next { right: 5px; }
+    .prev { left: 5px; }
+
+    .prev:hover, .next:hover {
+        background: rgba(0,0,0,0.75);
+    }
+
+    /* Dots below slideshow */
+    .dots { 
+        margin-top: 10px;
+    }
+    .dot {
+        height: 12px;
+        width: 12px;
+        margin: 3px;
+        background: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .active {
+        background: #333;
+    }
+
+    /* Order Form */
+    form {
+        background: white;
+        padding: 20px;
+        max-width: 500px;
+        margin: 20px auto;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        text-align: left;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 12px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 3px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    textarea {
+        resize: vertical;
+        height: 120px;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 12px;
+        background: black;
+        color: white;
+        border: none;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    button:hover {
+        background: #444;
+    }
+
+    .home-btn {
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+
 </head>
 <body>
-  <header>Lynn’s Engraving Kiosk</header>
-  <main class="button-grid">
-    <p>Welcome to Memorial Bands.</p>
+
+<header>Lynn’s Engraving Kiosk – Dog Tags</header>
+
+<!-- SLIDESHOW -->
+<div class="slideshow-container">
+
+    <div class="slide"><img src="Kiosk/Images/mb9.jpg" alt="Dog Tags 1"></div>
+    <div class="slide"><img src="Kiosk/Images/mb10.webp" alt="Dog Tags 2"></div>
+    <div class="slide"><img src="Kiosk/Images/mb11.jpg" alt="Dog Tags 3"></div>
+    <div class="slide"><img src="Kiosk/Images/mb12.jpg" alt="Dog Tags 4"></div>
+    <div class="slide"><img src="Kiosk/Images/mb13.avif" alt="Dog Tags 5"></div>
+    <div class="slide"><img src="Kiosk/Images/mb14.jpg" alt="Dog Tags  6"></div>
+    <div class="slide"><img src="Kiosk/Images/mb15.webp" alt="Dog Tags 7"></div>
+    <div class="slide"><img src="Kiosk/Images/mb16.webp" alt="Dog Tags 8"></div>
+
+    <!-- Arrows -->
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+</div>
+
+<!-- Dots -->
+<div class="dots">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+    <span class="dot" onclick="currentSlide(4)"></span>
+    <span class="dot" onclick="currentSlide(5)"></span>
+    <span class="dot" onclick="currentSlide(6)"></span>
+    <span class="dot" onclick="currentSlide(7)"></span>
+    <span class="dot" onclick="currentSlide(8)"></span>
+</div>
+
+<!-- ORDER FORM USING FORMSUBMIT -->
+<form action="https://formsubmit.co/lynnsengraving24@gmail.com" method="POST" enctype="multipart/form-data">
+
+    <!-- Hidden Tracking Field (correct placement) -->
+    <input type="hidden" name="tracking" id="trackingField" value="">
+
+    <!-- FormSubmit Settings -->
+    <input type="hidden" name="_subject" value="New Dog Tags Order">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_autoresponse" value="Thank you for your Dog Tags order! We will contact you shortly.">
+    <input type="hidden" name="_next" value="track.html">
+
+    <h2>Order a Dog Tags</h2>
+    <p>Please fill out the form below.</p>
+
+    <label>Your Name</label>
+    <input type="text" name="name" required>
+
+    <label>Your Email</label>
+    <input type="email" name="email" required>
+
+    <label>Engraving Text</label>
+    <textarea name="engraving" required></textarea>
+
+    <label>Upload Image or Logo (Optional)</label>
+    <input type="file" name="attachment" accept="image/*">
+
+    <label>Additional Notes</label>
+    <textarea name="notes"></textarea>
+
+    <button type="submit">Submit Order</button>
+</form>
+
+<div class="home-btn">
     <a href="../index.html"><button>Return Home</button></a>
-  </main>
+</div>
+
+<!-- SLIDESHOW SCRIPT -->
+<script>
+let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+    let i;
+    let slides = document.getElementsByClassName("slide");
+    let dots = document.getElementsByClassName("dot");
+
+    if (n > slides.length) { slideIndex = 1 }
+    if (n < 1) { slideIndex = slides.length }
+
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+
+    slides[slideIndex - 1].style.display = "block";
+    dots[slideIndex - 1].className += " active";
+}
+
+// Generate tracking number before form submit
+const form = document.querySelector("form");
+
+form.addEventListener("submit", function(e) {
+    const tracking = "MB-" + Math.floor(100000 + Math.random() * 900000);
+    document.getElementById("trackingField").value = tracking;
+    alert("Your order has been submitted!\nTracking Number: " + tracking);
+});
+</script>
+
 </body>
 </html>

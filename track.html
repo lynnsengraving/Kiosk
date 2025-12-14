@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Track Your Order - Lynn’s Engraving</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f6f6f6;
+        padding: 40px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    .track-box {
+        background: white;
+        max-width: 400px;
+        margin: auto;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    button {
+        margin-top: 15px;
+        width: 100%;
+        padding: 12px;
+        background: black;
+        color: white;
+        border: none;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #444;
+    }
+
+    .status-box {
+        margin-top: 25px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<h1>Track Your Order</h1>
+
+<div class="track-box">
+    <p>Enter your tracking number below:</p>
+
+    <input id="trackingInput" type="text" placeholder="Example: MB-724193"/>
+
+    <button onclick="checkStatus()">Check Status</button>
+
+    <div id="status" class="status-box"></div>
+</div>
+
+<script>
+// Editable status list
+// Lynn can update these values anytime
+const trackingStatuses = {
+    "MB-111111": "Received",
+    "MB-222222": "In Progress",
+    "MB-333333": "Engraving Complete",
+    "MB-444444": "Ready for Pickup",
+    "MB-555555": "Shipped"
+};
+
+function checkStatus() {
+    const code = document.getElementById("trackingInput").value.trim();
+    const statusBox = document.getElementById("status");
+
+    if (trackingStatuses[code]) {
+        statusBox.innerHTML = "Status: " + trackingStatuses[code];
+    } else {
+        statusBox.innerHTML = "Tracking number not found.";
+    }
+}
+</script>
+
+</body>
+</html>
