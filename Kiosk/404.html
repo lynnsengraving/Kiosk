@@ -2,12 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Redirecting…</title>
+  <title>Page Not Found – Lynn’s Engraving</title>
 
-  <!-- Redirect after 1 second -->
-  <meta http-equiv="refresh" content="1; url=index.html" />
+  <!-- GitHub Pages-safe absolute redirect -->
+  <meta http-equiv="refresh" content="2; url=/Kiosk/Kiosk/index.html">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 60px 20px;
+      background: #FFF8E7;
+      color: #333;
+    }
+    h1 {
+      color: #5C4033;
+      margin-bottom: 10px;
+    }
+    a {
+      color: #5C4033;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <script>
+    // JS backup redirect (in case meta refresh is blocked)
+    setTimeout(() => {
+      window.location.href = "/Kiosk/Kiosk/index.html";
+    }, 2000);
+  </script>
 </head>
-<body style="font-family: Arial, sans-serif; text-align:center; padding-top:40px;">
-  <p>Redirecting to Lynn’s Engraving Kiosk…</p>
+
+<body>
+  <h1>Oops! Page Not Found</h1>
+  <p>You’ll be redirected to the Lynn’s Engraving Kiosk shortly.</p>
+  <p>If not, <a href="/Kiosk/Kiosk/index.html">click here to return home</a>.</p>
 </body>
 </html>
