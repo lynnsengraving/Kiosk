@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lynn’s Engraving Kiosk</title>
 
+  <!-- IMPORTANT: GitHub Pages path -->
+  <base href="/Kiosk/Kiosk/">
+
   <link rel="stylesheet" href="site.css" />
 
   <style>
@@ -152,6 +155,7 @@
 
   const carousel = document.getElementById("carousel");
   const dotsWrap = document.getElementById("carouselDots");
+  const controls = carousel.querySelector(".carousel-controls");
 
   let current = 0;
   const intervalMs = 4000;
@@ -159,6 +163,16 @@
 
   function getImages() {
     return Array.from(carousel.querySelectorAll(".carousel-image"));
+  }
+
+  function stopTimer(){
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+
+  function resetTimer() {
+    stopTimer();
+    timer = setInterval(() => nextSlide(1), intervalMs);
   }
 
   function safeSetActive(index) {
@@ -199,11 +213,6 @@
     showSlide(current + dir);
   }
 
-  function resetTimer() {
-    if (timer) clearInterval(timer);
-    timer = setInterval(() => nextSlide(1), intervalMs);
-  }
-
   // ✅ Fisher–Yates shuffle (unbiased)
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -213,8 +222,6 @@
   }
 
   function buildSlides() {
-    const controls = carousel.querySelector(".carousel-controls");
-
     imageFiles.forEach((src) => {
       const img = document.createElement("img");
       img.src = src;
@@ -229,6 +236,7 @@
         const images = getImages();
         if (!images.length) {
           dotsWrap.innerHTML = "";
+          stopTimer();
           return;
         }
 
@@ -239,10 +247,12 @@
         syncDots();
       };
 
+      // Insert images BEFORE the controls layer so buttons always stay on top
       carousel.insertBefore(img, controls);
     });
   }
 
+  // Controls
   document.querySelectorAll(".carousel-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       if (!getImages().length) return;
@@ -252,12 +262,14 @@
     });
   });
 
+  // Keyboard
   window.addEventListener("keydown", (e) => {
     if (!getImages().length) return;
     if (e.key === "ArrowLeft") { nextSlide(-1); resetTimer(); }
     if (e.key === "ArrowRight") { nextSlide(1); resetTimer(); }
   });
 
+  // Swipe
   let startX = 0;
   carousel.addEventListener("touchstart", (e) => {
     startX = e.touches[0].clientX;
@@ -272,7 +284,11 @@
     }
   }, { passive: true });
 
-  // ✅ Init (shuffle happens ONCE per load)
+  // Pause on hover (desktop kiosk)
+  carousel.addEventListener("mouseenter", stopTimer);
+  carousel.addEventListener("mouseleave", resetTimer);
+
+  // Init
   shuffleArray(imageFiles);
   buildSlides();
   safeSetActive(0);
