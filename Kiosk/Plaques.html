@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plaques - Lynn’s Engraving</title>
 
+  <!-- IMPORTANT: GitHub Pages path -->
+  <base href="/Kiosk/Kiosk/">
+
   <style>
     :root{
       --walnut:#5C4033;
@@ -29,7 +32,6 @@
       color: var(--walnut);
     }
 
-    /* Slideshow (kiosk size) */
     .slideshow-container{
       width: 520px;
       max-width: calc(100vw - 40px);
@@ -55,7 +57,6 @@
       background: #000;
     }
 
-    /* Arrows */
     .prev,.next{
       cursor:pointer;
       position:absolute;
@@ -74,7 +75,6 @@
     .prev{ left:10px; }
     .prev:hover,.next:hover{ background:rgba(0,0,0,0.75); }
 
-    /* Dots */
     .dots{ margin-top: 10px; }
     .dot{
       height: 12px;
@@ -87,7 +87,6 @@
     }
     .dot.active{ background: var(--walnut); }
 
-    /* Order Form */
     form{
       background:#fff;
       padding:20px;
@@ -130,6 +129,8 @@
       width:100%;
       font-weight:800;
       transition:0.2s ease;
+      display:block;
+      text-align:center;
     }
 
     .btn:hover{
@@ -148,16 +149,18 @@
 
     /* Link styled like button */
     .btn-link{
-      display:inline-block;
+      display:block;
       width:520px;
       max-width:calc(100vw - 40px);
       text-decoration:none;
+      margin:0 auto;
     }
 
     #result{
       text-align:center;
       font-weight:800;
       margin-top:10px;
+      min-height: 22px;
     }
   </style>
 </head>
@@ -165,7 +168,6 @@
 <body>
   <header>Lynn’s Engraving Kiosk – Plaques</header>
 
-  <!-- SLIDESHOW -->
   <div class="slideshow-container" id="slideshow">
     <div class="slide"><img src="Images/mb17.webp" alt="Plaque 1"></div>
     <div class="slide"><img src="Images/mb18.jpeg" alt="Plaque 2"></div>
@@ -182,7 +184,6 @@
 
   <div class="dots" id="dotsWrap"></div>
 
-  <!-- ✅ Web3Forms (submit handled by fetch for file upload) -->
   <form id="orderForm" enctype="multipart/form-data">
     <input type="hidden" name="access_key" value="ac2a3a1e-0b8f-4460-ae85-3e63a64a377d">
 
@@ -190,11 +191,10 @@
     <input type="hidden" name="order_type" value="Plaques">
     <input type="hidden" name="replyto" id="replyto">
     <input type="hidden" name="subject" id="subject">
-
     <input type="hidden" name="tracking" id="trackingField" value="">
 
     <h2>Order Plaques</h2>
-    <p>Please fill out the form below.</p>
+    <p style="text-align:center;margin:0 0 12px 0;">Please fill out the form below.</p>
 
     <label>Your Name</label>
     <input type="text" name="name" autocomplete="name" required>
@@ -216,7 +216,7 @@
   </form>
 
   <div class="home-btn">
-    <a class="btn-link" href="index.html"><span class="btn">Return Home</span></a>
+    <a class="btn-link btn" href="index.html">Return Home</a>
   </div>
 
   <script>
@@ -229,7 +229,7 @@
 
     let slideIndex = 1;
     const intervalMs = 4000;
-    let timer;
+    let timer = null;
 
     function getSlides(){ return Array.from(document.getElementsByClassName("slide")); }
 
@@ -246,7 +246,6 @@
     function showSlides(n){
       const slides = getSlides();
       const dots = Array.from(dotsWrap.getElementsByClassName("dot"));
-
       if (!slides.length) return;
 
       if (n > slides.length) slideIndex = 1;
@@ -269,13 +268,22 @@
       resetTimer();
     }
 
+    function stopTimer(){
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
     function resetTimer(){
-      clearInterval(timer);
+      stopTimer();
       timer = setInterval(() => plusSlides(1), intervalMs);
     }
 
     prevBtn.addEventListener("click", () => plusSlides(-1));
     nextBtn.addEventListener("click", () => plusSlides(1));
+
+    // Pause on hover
+    slideshow.addEventListener("mouseenter", stopTimer);
+    slideshow.addEventListener("mouseleave", resetTimer);
 
     // Swipe
     let startX = 0;
@@ -295,7 +303,7 @@
     showSlides(slideIndex);
     resetTimer();
 
-    // ===== Web3Forms Submit (file upload safe) =====
+    // ===== Web3Forms Submit =====
     const form = document.getElementById("orderForm");
     const submitBtn = document.getElementById("submitBtn");
     const result = document.getElementById("result");
@@ -321,15 +329,21 @@
 
         const res = await fetch("https://api.web3forms.com/submit", {
           method: "POST",
+          headers: { "Accept": "application/json" },
           body: formData
         });
 
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
 
         if (res.ok) {
-          result.textContent = "✅ Sent!";
+          result.textContent = `✅ Sent! Tracking Number: ${tracking}`;
           alert("Your order has been submitted!\nTracking Number: " + tracking);
-          window.location.href = "track.html?code=" + encodeURIComponent(tracking);
+
+          // ✅ Redirect to tracking page (change filename if needed)
+          setTimeout(() => {
+            window.location.href = `tracking.html?code=${encodeURIComponent(tracking)}`;
+          }, 900);
+
         } else {
           result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
           submitted = false;
