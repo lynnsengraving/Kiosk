@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Order Tracking – Lynn’s Engraving</title>
 
-  <!-- IMPORTANT: GitHub Pages path -->
+  <!-- GitHub Pages path -->
   <base href="/Kiosk/Kiosk/">
 
   <style>
@@ -78,7 +78,7 @@
   <h1>Thank You for Your Order!</h1>
   <p>Enter your tracking number to see your order status.</p>
 
-  <input id="trackingInput" placeholder="Ex: MB-966194" autocomplete="off" />
+  <input id="trackingInput" placeholder="Ex: MB-1001" autocomplete="off" />
   <br>
 
   <button id="checkBtn" type="button">Check Status</button>
@@ -87,32 +87,39 @@
 
   <div id="result" class="result">
     <div class="muted">
-      Tip: Tracking codes may look like <b>MB-123456</b>, <b>DT-123456</b>, <b>DW-123456</b>, <b>PL-123456</b>, <b>FR-123456</b>, or <b>CO-123456</b>.
+      Tip: Tracking codes may look like <b>MB-1001</b>, <b>DT-1002</b>, <b>DW-1003</b>, <b>PL-1004</b>, <b>FR-1005</b>, or <b>CO-1006</b>.
     </div>
   </div>
 
   <script>
-    // ✅ Demo tracking "database" (replace later with real system)
-    // Added multiple prefixes so your other order pages won't always fail "not found"
-    const orders = {
-      "MB-966194": { name: "Custom Memorial Band", status: "In Production", updated: "December 14, 2025" },
-      "FR-123456": { name: "Engraved Frame",      status: "Shipped",       updated: "December 12, 2025" },
-      "PL-907918": { name: "Custom Plaque",       status: "Processing",    updated: "December 14, 2025" },
-      "DW-445512": { name: "Engraved Drinkware",  status: "Processing",    updated: "December 14, 2025" },
-      "DT-778801": { name: "Dog Tags",            status: "In Production", updated: "December 14, 2025" },
-      "CO-662210": { name: "Custom Order",        status: "Received",      updated: "December 14, 2025" }
-    };
+    // =============================
+    // Config
+    // =============================
+    const TRACKING_JSON_URL = "tracking.json"; // must be in same folder as track.html
+    const HOME_URL = "/Kiosk/Kiosk/index.html";
 
+    // =============================
+    // DOM
+    // =============================
     const inputEl  = document.getElementById("trackingInput");
     const resultEl = document.getElementById("result");
     const checkBtn = document.getElementById("checkBtn");
     const clearBtn = document.getElementById("clearBtn");
     const homeBtn  = document.getElementById("homeBtn");
 
-    function renderDefaultTip() {
+    // =============================
+    // State
+    // =============================
+    let trackingDb = null;     // will hold JSON object after fetch
+    let loadingDb = false;
+
+    // =============================
+    // Helpers
+    // =============================
+    function renderTip() {
       resultEl.innerHTML = `
         <div class="muted">
-          Tip: Tracking codes may look like <b>MB-123456</b>, <b>DT-123456</b>, <b>DW-123456</b>, <b>PL-123456</b>, <b>FR-123456</b>, or <b>CO-123456</b>.
+          Tip: Tracking codes may look like <b>MB-1001</b>, <b>DT-1002</b>, <b>DW-1003</b>, <b>PL-1004</b>, <b>FR-1005</b>, or <b>CO-1006</b>.
         </div>
       `;
     }
@@ -121,11 +128,10 @@
       return (raw || "")
         .trim()
         .toUpperCase()
-        .replace(/\s+/g, ""); // remove spaces
+        .replace(/\s+/g, "");
     }
 
     function setUrlCode(code) {
-      // update the address bar to ?code=XXXX without reloading
       if (window.history && window.history.replaceState) {
         const url = new URL(window.location.href);
         url.searchParams.set("code", code);
@@ -133,7 +139,58 @@
       }
     }
 
-    function checkStatus() {
+    function clearUrlCode() {
+      if (window.history && window.history.replaceState) {
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, "", cleanUrl);
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    // =============================
+    // Load tracking.json
+    // =============================
+    async function loadTrackingDb() {
+      if (trackingDb) return trackingDb;
+      if (loadingDb) return null;
+
+      loadingDb = true;
+      resultEl.innerHTML = `<div class="muted">Loading tracking database…</div>`;
+
+      try {
+        const res = await fetch(TRACKING_JSON_URL, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        trackingDb = await res.json();
+        loadingDb = false;
+        return trackingDb;
+      } catch (err) {
+        loadingDb = false;
+        trackingDb = null;
+
+        resultEl.innerHTML = `
+          <div class="error">Tracking system unavailable.</div>
+          <div class="muted">
+            Could not load <span class="mono">${escapeHtml(TRACKING_JSON_URL)}</span>.
+            Make sure <b>tracking.json</b> is uploaded in the same folder as <b>track.html</b>.
+          </div>
+        `;
+        return null;
+      }
+    }
+
+    // =============================
+    // Lookup + render
+    // =============================
+    async function checkStatus() {
       const code = normalizeCode(inputEl.value);
 
       if (!code) {
@@ -141,55 +198,58 @@
         return;
       }
 
+      const db = await loadTrackingDb();
+      if (!db) return;
+
       setUrlCode(code);
 
-      const order = orders[code];
+      const order = db[code];
       if (!order) {
         resultEl.innerHTML = `
           <div class="error">Tracking number not found.</div>
-          <div class="muted">Entered: <b class="mono">${code}</b></div>
+          <div class="muted">Entered: <b class="mono">${escapeHtml(code)}</b></div>
         `;
         return;
       }
 
+      const item = order.item ? escapeHtml(order.item) : "Order";
+      const status = order.status ? escapeHtml(order.status) : "Unknown";
+      const lastUpdate = order.lastUpdate ? escapeHtml(order.lastUpdate) : "—";
+      const message = order.message ? escapeHtml(order.message) : "";
+
       resultEl.innerHTML = `
         <div class="success">✅ Tracking Found</div>
-        <div style="margin-top:10px;"><strong>Tracking Number:</strong> <span class="mono">${code}</span></div>
-        <div><strong>Item:</strong> ${order.name}</div>
-        <div><strong>Status:</strong> ${order.status}</div>
-        <div><strong>Last Updated:</strong> ${order.updated}</div>
+        <div style="margin-top:10px;"><strong>Tracking Number:</strong> <span class="mono">${escapeHtml(code)}</span></div>
+        <div><strong>Item:</strong> ${item}</div>
+        <div><strong>Status:</strong> ${status}</div>
+        <div><strong>Last Updated:</strong> ${lastUpdate}</div>
+        ${message ? `<div style="margin-top:10px;"><strong>Message:</strong> ${message}</div>` : ""}
       `;
     }
 
     function clearForm() {
       inputEl.value = "";
-      renderDefaultTip();
-
-      // remove ?code= from the address bar
-      if (window.history && window.history.replaceState) {
-        const cleanUrl = window.location.origin + window.location.pathname;
-        window.history.replaceState({}, "", cleanUrl);
-      }
-
+      renderTip();
+      clearUrlCode();
       inputEl.focus();
     }
 
     function goHome() {
-      // Prefer absolute to avoid routing weirdness on GitHub Pages
-      window.location.href = "/Kiosk/Kiosk/index.html";
+      window.location.href = HOME_URL;
     }
 
-    // Buttons
+    // =============================
+    // Events
+    // =============================
     checkBtn.addEventListener("click", checkStatus);
     clearBtn.addEventListener("click", clearForm);
     homeBtn.addEventListener("click", goHome);
 
-    // Enter key triggers search
     inputEl.addEventListener("keydown", (e) => {
       if (e.key === "Enter") checkStatus();
     });
 
-    // Auto-uppercase as user types (keeps cursor position stable)
+    // Uppercase as user types (keeps cursor stable)
     inputEl.addEventListener("input", () => {
       const start = inputEl.selectionStart;
       const end = inputEl.selectionEnd;
@@ -197,13 +257,21 @@
       inputEl.setSelectionRange(start, end);
     });
 
-    // ✅ AUTO-LOAD TRACKING CODE FROM URL (?code=MB-123456)
-    const params = new URLSearchParams(window.location.search);
-    const codeFromUrl = params.get("code");
-    if (codeFromUrl) {
-      inputEl.value = normalizeCode(codeFromUrl);
-      checkStatus();
-    }
+    // =============================
+    // Init: preload db + auto-load code
+    // =============================
+    (async function init() {
+      await loadTrackingDb();
+
+      const params = new URLSearchParams(window.location.search);
+      const codeFromUrl = params.get("code");
+      if (codeFromUrl) {
+        inputEl.value = normalizeCode(codeFromUrl);
+        checkStatus();
+      } else {
+        renderTip();
+      }
+    })();
   </script>
 
 </body>
