@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plaques - Lynn’s Engraving</title>
+
+  <style>
+    :root{
+      --walnut:#5C4033;
+      --cream:#FFF8E7;
+      --dark:#111;
+      --shadow:rgba(0,0,0,0.18);
+    }
+
+    body{
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: var(--cream);
+      color: var(--dark);
+      text-align: center;
+    }
+
+    header{
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 25px;
+      color: var(--walnut);
+    }
+
+    /* Slideshow (kiosk size) */
+    .slideshow-container{
+      width: 520px;
+      max-width: calc(100vw - 40px);
+      position: relative;
+      margin: 0 auto 18px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      padding: 10px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.25);
+      touch-action: pan-y;
+    }
+
+    .slide{ display:none; }
+
+    .slide img{
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 8px;
+      user-select: none;
+      -webkit-user-drag: none;
+      background: #000;
+    }
+
+    /* Arrows */
+    .prev,.next{
+      cursor:pointer;
+      position:absolute;
+      top:50%;
+      padding:12px;
+      margin-top:-25px;
+      color:#fff;
+      background:rgba(0,0,0,0.45);
+      font-size:30px;
+      font-weight:bold;
+      border-radius:10px;
+      user-select:none;
+      border:none;
+    }
+    .next{ right:10px; }
+    .prev{ left:10px; }
+    .prev:hover,.next:hover{ background:rgba(0,0,0,0.75); }
+
+    /* Dots */
+    .dots{ margin-top: 10px; }
+    .dot{
+      height: 12px;
+      width: 12px;
+      margin: 3px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .dot.active{ background: var(--walnut); }
+
+    /* Order Form */
+    form{
+      background:#fff;
+      padding:20px;
+      max-width:520px;
+      margin:20px auto;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.2);
+      text-align:left;
+    }
+
+    label{
+      font-weight:bold;
+      display:block;
+      margin-top:12px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    textarea{
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      border-radius:6px;
+      border:1px solid #ccc;
+      box-sizing:border-box;
+    }
+
+    textarea{ resize:vertical; min-height:120px; }
+
+    .btn{
+      margin-top:15px;
+      padding:12px;
+      background: var(--walnut);
+      color: var(--cream);
+      border:none;
+      font-size:16px;
+      border-radius:10px;
+      cursor:pointer;
+      width:100%;
+      font-weight:800;
+      transition:0.2s ease;
+    }
+
+    .btn:hover{
+      background: var(--cream);
+      color: var(--walnut);
+      outline: 2px solid var(--walnut);
+    }
+
+    .btn:disabled{
+      opacity:0.6;
+      cursor:not-allowed;
+      outline:none;
+    }
+
+    .home-btn{ margin-top:16px; text-align:center; }
+
+    /* Link styled like button */
+    .btn-link{
+      display:inline-block;
+      width:520px;
+      max-width:calc(100vw - 40px);
+      text-decoration:none;
+    }
+
+    #result{
+      text-align:center;
+      font-weight:800;
+      margin-top:10px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>Lynn’s Engraving Kiosk – Plaques</header>
+
+  <!-- SLIDESHOW -->
+  <div class="slideshow-container" id="slideshow">
+    <div class="slide"><img src="Images/mb17.webp" alt="Plaque 1"></div>
+    <div class="slide"><img src="Images/mb18.jpeg" alt="Plaque 2"></div>
+    <div class="slide"><img src="Images/mb19.jpeg" alt="Plaque 3"></div>
+    <div class="slide"><img src="Images/mb20.jpeg" alt="Plaque 4"></div>
+    <div class="slide"><img src="Images/mb21.jpeg" alt="Plaque 5"></div>
+    <div class="slide"><img src="Images/mb22.jpeg" alt="Plaque 6"></div>
+    <div class="slide"><img src="Images/mb23.jpeg" alt="Plaque 7"></div>
+    <div class="slide"><img src="Images/mb24.jpeg" alt="Plaque 8"></div>
+
+    <button class="prev" type="button" aria-label="Previous" id="prevBtn">❮</button>
+    <button class="next" type="button" aria-label="Next" id="nextBtn">❯</button>
+  </div>
+
+  <div class="dots" id="dotsWrap"></div>
+
+  <!-- ✅ Web3Forms (submit handled by fetch for file upload) -->
+  <form id="orderForm" enctype="multipart/form-data">
+    <input type="hidden" name="access_key" value="ac2a3a1e-0b8f-4460-ae85-3e63a64a377d">
+
+    <input type="hidden" name="from_name" value="Lynn’s Engraving Kiosk">
+    <input type="hidden" name="order_type" value="Plaques">
+    <input type="hidden" name="replyto" id="replyto">
+    <input type="hidden" name="subject" id="subject">
+
+    <input type="hidden" name="tracking" id="trackingField" value="">
+
+    <h2>Order Plaques</h2>
+    <p>Please fill out the form below.</p>
+
+    <label>Your Name</label>
+    <input type="text" name="name" autocomplete="name" required>
+
+    <label>Your Email</label>
+    <input type="email" name="email" autocomplete="email" required>
+
+    <label>Engraving Text</label>
+    <textarea name="engraving" required></textarea>
+
+    <label>Upload Image or Logo (Optional)</label>
+    <input type="file" name="attachment" accept="image/*">
+
+    <label>Additional Notes</label>
+    <textarea name="notes"></textarea>
+
+    <button class="btn" id="submitBtn" type="submit">Submit Order</button>
+    <div id="result"></div>
+  </form>
+
+  <div class="home-btn">
+    <a class="btn-link" href="index.html"><span class="btn">Return Home</span></a>
+  </div>
+
+  <script>
+  (function () {
+    // ===== Slideshow =====
+    const slideshow = document.getElementById("slideshow");
+    const dotsWrap = document.getElementById("dotsWrap");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    let slideIndex = 1;
+    const intervalMs = 4000;
+    let timer;
+
+    function getSlides(){ return Array.from(document.getElementsByClassName("slide")); }
+
+    function buildDots(){
+      dotsWrap.innerHTML = "";
+      getSlides().forEach((_, i) => {
+        const dot = document.createElement("span");
+        dot.className = "dot";
+        dot.addEventListener("click", () => currentSlide(i + 1));
+        dotsWrap.appendChild(dot);
+      });
+    }
+
+    function showSlides(n){
+      const slides = getSlides();
+      const dots = Array.from(dotsWrap.getElementsByClassName("dot"));
+
+      if (!slides.length) return;
+
+      if (n > slides.length) slideIndex = 1;
+      if (n < 1) slideIndex = slides.length;
+
+      slides.forEach(s => s.style.display = "none");
+      dots.forEach(d => d.classList.remove("active"));
+
+      slides[slideIndex - 1].style.display = "block";
+      if (dots[slideIndex - 1]) dots[slideIndex - 1].classList.add("active");
+    }
+
+    function plusSlides(n){
+      showSlides(slideIndex += n);
+      resetTimer();
+    }
+
+    function currentSlide(n){
+      showSlides(slideIndex = n);
+      resetTimer();
+    }
+
+    function resetTimer(){
+      clearInterval(timer);
+      timer = setInterval(() => plusSlides(1), intervalMs);
+    }
+
+    prevBtn.addEventListener("click", () => plusSlides(-1));
+    nextBtn.addEventListener("click", () => plusSlides(1));
+
+    // Swipe
+    let startX = 0;
+    slideshow.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive:true });
+    slideshow.addEventListener("touchend", (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) plusSlides(dx > 0 ? -1 : 1);
+    }, { passive:true });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") plusSlides(-1);
+      if (e.key === "ArrowRight") plusSlides(1);
+    });
+
+    // Init slideshow
+    buildDots();
+    showSlides(slideIndex);
+    resetTimer();
+
+    // ===== Web3Forms Submit (file upload safe) =====
+    const form = document.getElementById("orderForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const result = document.getElementById("result");
+    let submitted = false;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (submitted) return;
+
+      const tracking = "PL-" + Math.floor(100000 + Math.random() * 900000);
+      document.getElementById("trackingField").value = tracking;
+
+      document.getElementById("replyto").value = form.email.value;
+      document.getElementById("subject").value = `New Plaque Order – ${form.name.value} (${tracking})`;
+
+      submitted = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending…";
+      result.textContent = "Please wait…";
+
+      try {
+        const formData = new FormData(form);
+
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          result.textContent = "✅ Sent!";
+          alert("Your order has been submitted!\nTracking Number: " + tracking);
+          window.location.href = "track.html?code=" + encodeURIComponent(tracking);
+        } else {
+          result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
+          submitted = false;
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Order";
+        }
+      } catch (err) {
+        result.textContent = "❌ Not sent: Network/blocked request.";
+        submitted = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Order";
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

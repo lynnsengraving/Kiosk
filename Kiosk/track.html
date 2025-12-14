@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Order Tracking – Lynn’s Engraving</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #FFF8E7;
+    color: #333;
+    text-align: center;
+    padding: 40px;
+  }
+
+  h1 {
+    color: #5C4033;
+  }
+
+  input {
+    padding: 10px;
+    width: 260px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  button {
+    padding: 10px 16px;
+    font-size: 16px;
+    margin: 6px;
+    cursor: pointer;
+  }
+
+  .home-btn {
+    background: #5C4033;
+    color: #FFF8E7;
+    border: none;
+  }
+
+  .result {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+
+  .error {
+    color: red;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Thank You for Your Order!</h1>
+<p>Please enter your tracking number below to see your order status.</p>
+
+<input id="trackingInput" placeholder="Ex: MB-966194" />
+<br>
+
+<button onclick="checkStatus()">Check Status</button>
+<button class="home-btn" onclick="goHome()">Home</button>
+
+<div id="result" class="result"></div>
+
+<script>
+  // 🔹 Simple "database"
+  const orders = {
+    "MB-966194": {
+      name: "Custom Memorial Band",
+      status: "In Production",
+      updated: "December 14, 2025"
+    },
+    "MB-123456": {
+      name: "Engraved Frame",
+      status: "Shipped",
+      updated: "December 12, 2025"
+    },
+    "MB-907918": {
+      name: "Custom Engraved Item",
+      status: "Processing",
+      updated: "December 14, 2025"
+    }
+  };
+
+  function checkStatus() {
+    const input = document.getElementById("trackingInput").value.trim().toUpperCase();
+    const result = document.getElementById("result");
+
+    if (!input) {
+      result.innerHTML = "<span class='error'>Please enter a tracking number.</span>";
+      return;
+    }
+
+    if (orders[input]) {
+      result.innerHTML = `
+        <strong>Tracking Number:</strong> ${input}<br>
+        <strong>Item:</strong> ${orders[input].name}<br>
+        <strong>Status:</strong> ${orders[input].status}<br>
+        <strong>Last Updated:</strong> ${orders[input].updated}
+      `;
+    } else {
+      result.innerHTML = "<span class='error'>Tracking number not found.</span>";
+    }
+  }
+
+  function goHome() {
+    window.location.href = "index.html"; 
+  }
+
+  // 🔹 AUTO-LOAD TRACKING NUMBER FROM URL
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+
+  if (code) {
+    document.getElementById("trackingInput").value = code.toUpperCase();
+    checkStatus();
+  }
+</script>
+
+</body>
+</html>

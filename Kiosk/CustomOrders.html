@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Orders - Lynn’s Engraving</title>
+
+  <style>
+    :root{
+      --walnut:#5C4033;
+      --cream:#FFF8E7;
+      --dark:#111;
+      --shadow:rgba(0,0,0,0.18);
+    }
+
+    body{
+      margin:0;
+      padding:20px;
+      font-family: Arial, sans-serif;
+      background:var(--cream);
+      color:var(--dark);
+      text-align:center;
+    }
+
+    header{
+      font-size:32px;
+      font-weight:800;
+      margin-bottom:20px;
+      color:var(--walnut);
+    }
+
+    .slideshow-container{
+      width:520px;
+      max-width:100%;
+      margin:0 auto 14px;
+      position:relative;
+      background:#000;
+      padding:10px;
+      border-radius:12px;
+      box-shadow:0 0 12px rgba(0,0,0,0.25);
+      touch-action:pan-y;
+    }
+
+    .slide{ display:none; }
+    .slide img{
+      width:100%;
+      height:320px;
+      object-fit:cover;
+      border-radius:8px;
+      user-select:none;
+      -webkit-user-drag:none;
+      background:#000;
+    }
+
+    .nav-btn{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      background:rgba(0,0,0,0.5);
+      color:#fff;
+      border:none;
+      font-size:30px;
+      padding:10px 12px;
+      cursor:pointer;
+      border-radius:8px;
+      user-select:none;
+    }
+    .nav-prev{ left:10px; }
+    .nav-next{ right:10px; }
+
+    .dots{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin:10px 0 18px;
+      flex-wrap:wrap;
+    }
+
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:#aaa;
+      cursor:pointer;
+    }
+    .dot.active{ background:var(--walnut); }
+
+    form{
+      background:#fff;
+      padding:20px;
+      max-width:520px;
+      margin:0 auto;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.2);
+      text-align:left;
+    }
+
+    h2{
+      margin:0 0 6px 0;
+      color:var(--walnut);
+      text-align:center;
+    }
+
+    label{ font-weight:700; display:block; margin-top:12px; }
+
+    input, textarea, select{
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      border-radius:6px;
+      border:1px solid #ccc;
+      box-sizing:border-box;
+      font-size:1rem;
+    }
+
+    textarea{ min-height:120px; resize:vertical; }
+
+    .btn{
+      margin-top:15px;
+      width:100%;
+      padding:12px;
+      background:var(--walnut);
+      color:var(--cream);
+      border:none;
+      border-radius:10px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 4px 8px var(--shadow);
+      transition:0.2s ease;
+      display:block;
+      text-align:center;
+    }
+
+    .btn:hover{
+      background:var(--cream);
+      color:var(--walnut);
+      outline:2px solid var(--walnut);
+    }
+
+    .btn:disabled{
+      opacity:0.6;
+      cursor:not-allowed;
+      outline:none;
+    }
+
+    .home-btn{
+      max-width:520px;
+      margin:14px auto 0;
+      text-align:center;
+    }
+    .home-btn a{ text-decoration:none; display:block; }
+  </style>
+</head>
+
+<body>
+
+<header>Lynn’s Engraving Kiosk – Custom Orders</header>
+
+<div class="slideshow-container" id="slideshow">
+  <div class="slide"><img src="Images/mb41.webp" alt="Custom Order Example 1"></div>
+  <div class="slide"><img src="Images/mb43.jpg"  alt="Custom Order Example 2"></div>
+  <div class="slide"><img src="Images/mb44.webp" alt="Custom Order Example 3"></div>
+
+  <button class="nav-btn nav-prev" type="button" aria-label="Previous" onclick="prev()">❮</button>
+  <button class="nav-btn nav-next" type="button" aria-label="Next" onclick="next()">❯</button>
+</div>
+
+<div class="dots" id="dots"></div>
+
+<form id="orderForm">
+  <!-- ✅ Web3Forms -->
+  <input type="hidden" name="access_key" value="ac2a3a1e-0b8f-4460-ae85-3e63a64a377d">
+
+  <!-- Helpful email metadata -->
+  <input type="hidden" name="from_name" value="Lynn’s Engraving Kiosk">
+  <input type="hidden" name="replyto" id="replyto">
+  <input type="hidden" name="subject" id="subject">
+
+  <!-- Tracking -->
+  <input type="hidden" name="tracking" id="tracking">
+
+  <h2>Custom Order Request</h2>
+  <p style="text-align:center;margin:0 0 12px 0;">Please fill out the form below.</p>
+
+  <label>Your Name</label>
+  <input type="text" name="name" autocomplete="name" required>
+
+  <label>Your Email</label>
+  <input type="email" name="email" autocomplete="email" inputmode="email" required>
+
+  <label>Item Type</label>
+  <select name="item_type" required>
+    <option value="">Select one…</option>
+    <option>Memorial Band</option>
+    <option>Dog Tags</option>
+    <option>Drinkware</option>
+    <option>Frame</option>
+    <option>Plaque</option>
+    <option>Other</option>
+  </select>
+
+  <label>Engraving / Design Details</label>
+  <textarea name="message" required></textarea>
+
+  <label>Additional Notes (Optional)</label>
+  <textarea name="notes"></textarea>
+
+  <button class="btn" id="submitBtn" type="submit">Submit Custom Order</button>
+
+  <p id="result" style="text-align:center;margin:12px 0 0 0;font-weight:700;"></p>
+</form>
+
+<div class="home-btn">
+  <a href="index.html"><span class="btn">Return Home</span></a>
+</div>
+
+<script>
+  // Slideshow
+  let index = 0;
+  const slides = document.querySelectorAll(".slide");
+  const dotsWrap = document.getElementById("dots");
+
+  slides.forEach((_, i) => {
+    const d = document.createElement("span");
+    d.className = "dot";
+    d.addEventListener("click", () => show(i));
+    dotsWrap.appendChild(d);
+  });
+
+  function show(i){
+    slides.forEach(s => s.style.display="none");
+    document.querySelectorAll(".dot").forEach(d => d.classList.remove("active"));
+    index = (i + slides.length) % slides.length;
+    slides[index].style.display="block";
+    dotsWrap.children[index].classList.add("active");
+  }
+  function next(){ show(index + 1); }
+  function prev(){ show(index - 1); }
+  show(0);
+
+  // Form submit (Web3Forms)
+  const form = document.getElementById("orderForm");
+  const result = document.getElementById("result");
+  const btn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Tracking + subject + reply-to
+    const tracking = "CO-" + Math.floor(100000 + Math.random() * 900000);
+    document.getElementById("tracking").value = tracking;
+    document.getElementById("subject").value = `New Custom Order – ${form.name.value} (${tracking})`;
+    document.getElementById("replyto").value = form.email.value;
+
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+    result.textContent = "Please wait…";
+
+    try {
+      const payload = Object.fromEntries(new FormData(form).entries());
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        result.textContent = "✅ Sent! Check your email for confirmation.";
+        alert(`Order submitted!\nTracking Number: ${tracking}`);
+        form.reset();
+        show(0);
+      } else {
+        result.textContent = "❌ Not sent: " + (data.message || "Unknown error");
+        btn.disabled = false;
+        btn.textContent = "Submit Custom Order";
+      }
+    } catch (err) {
+      result.textContent = "❌ Not sent: Network/blocked request.";
+      btn.disabled = false;
+      btn.textContent = "Submit Custom Order";
+    }
+  });
+</script>
+
+</body>
+</html>

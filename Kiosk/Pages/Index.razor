@@ -1,0 +1,43 @@
+@page "/"
+@inject NavigationManager Nav
+
+<PageTitle>Lynn’s Engraving Kiosk</PageTitle>
+
+<header class="kiosk-header">Lynn’s Engraving Kiosk</header>
+
+<div class="carousel" id="carousel">
+  <div class="carousel-controls">
+    <button class="carousel-btn" data-dir="prev" aria-label="Previous">&#10094;</button>
+    <button class="carousel-btn" data-dir="next" aria-label="Next">&#10095;</button>
+  </div>
+  <div class="carousel-dots" id="carouselDots"></div>
+</div>
+
+<main>
+  <div class="button-grid">
+    <button class="kiosk-btn" @onclick="() => Nav.NavigateTo("/memorial-bands")">Memorial Bands</button>
+    <button class="kiosk-btn" @onclick="() => Nav.NavigateTo("/dog-tags")">Dog Tags</button>
+    <button class="kiosk-btn" @onclick="() => Nav.NavigateTo("/drinkware")">Drinkware</button>
+    <button class="kiosk-btn" @onclick="() => Nav.NavigateTo("/plaques")">Plaques</button>
+    <button class="kiosk-btn" @onclick="() => Nav.NavigateTo("/frames")">Frames &amp; Framing</button>
+    <button class="kiosk-btn" @onclick="() => Nav.NavigateTo("/custom-orders")">Custom Orders</button>
+    <button class="kiosk-btn" @onclick="() => Nav.NavigateTo("/other")">Other</button>
+    <button class="kiosk-btn" @onclick="() => Nav.NavigateTo("/admin")">Admin</button>
+  </div>
+</main>
+
+@code {
+  // ✅ match your updated filesystem: /wwwroot/Images/mb*
+  private readonly string[] imageFiles =
+  [
+    "Images/mb1.webp","Images/mb2.webp","Images/mb3.jpg","Images/mb4.jpg","Images/mb5.avif",
+    "Images/mb6.jpg","Images/mb7.webp","Images/mb8.webp","Images/mb9.jpg","Images/mb10.jpg",
+    "Images/mb11.jpg","Images/mb12.jpg","Images/mb13.jpg","Images/mb14.jpg","Images/mb15.jpg",
+    "Images/mb16.jpg","Images/mb17.webp","Images/mb18.jpeg","Images/mb19.jpeg","Images/mb20.jpeg",
+    "Images/mb21.jpeg","Images/mb22.jpeg","Images/mb23.jpeg","Images/mb24.jpeg","Images/mb25.png",
+    "Images/mb26.jpeg","Images/mb27.jpeg","Images/mb28.jpeg","Images/mb29.jpg","Images/mb30.png",
+    "Images/mb31.webp","Images/mb32.jpeg","Images/mb33.webp","Images/mb34.jpeg","Images/mb35.jpeg",
+    "Images/mb36.jpeg","Images/mb37.jpeg","Images/mb38.webp","Images/mb39.jpeg","Images/mb40.webp",
+    "Images/mb41.webp","Images/mb42.webp","Images/mb43.jpg","Images/mb44.webp"
+  ];
+}

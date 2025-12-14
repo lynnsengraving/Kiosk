@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lynn’s Engraving Kiosk</title>
+
+  <link rel="stylesheet" href="site.css" />
+
+  <style>
+    :root { --walnut:#5C4033; --cream:#FFF8E7; --dark:#111; --shadow:rgba(0,0,0,0.18); }
+
+    body { margin:0; background:var(--cream); font-family:'Poppins',sans-serif; color:var(--dark); }
+
+    header {
+      background:var(--walnut); color:var(--cream); text-align:center;
+      padding:1.5rem 0; font-size:1.9rem; font-weight:700; letter-spacing:1px;
+      box-shadow:0 2px 6px rgba(0,0,0,0.25);
+      position:sticky; top:0; z-index:50;
+    }
+
+    .carousel {
+      max-width: 720px;
+      margin: 2rem auto 1rem auto;
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      background: #000;
+      aspect-ratio: 16 / 9;
+      touch-action: pan-y;
+    }
+
+    .carousel-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .carousel-image.active { display:block; }
+
+    .carousel-controls {
+      position:absolute; inset:0;
+      display:flex; justify-content:space-between; align-items:center;
+      pointer-events:none;
+      z-index: 5;
+    }
+
+    .carousel-btn {
+      pointer-events:auto;
+      background:rgba(0,0,0,0.4);
+      border:none; color:#fff; font-size:2rem; line-height:1;
+      padding:0.3rem 0.7rem; margin:0 0.5rem;
+      border-radius:999px; cursor:pointer; transition:0.2s ease;
+    }
+    .carousel-btn:hover { background:rgba(0,0,0,0.7); }
+
+    .carousel-dots {
+      position:absolute; bottom:0.6rem; left:50%;
+      transform:translateX(-50%);
+      display:flex; gap:0.45rem;
+      padding: 0.25rem 0.35rem;
+      background: rgba(0,0,0,0.25);
+      border-radius: 999px;
+      backdrop-filter: blur(4px);
+      z-index: 6;
+    }
+
+    .carousel-dot {
+      width:10px; height:10px; border-radius:50%;
+      background:rgba(255,255,255,0.5);
+      border:none; cursor:pointer;
+    }
+    .carousel-dot.active { background:#fff; }
+
+    main { padding: 1rem 1rem 2rem; max-width: 900px; margin:auto; }
+
+    .button-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+      gap:1.2rem;
+      padding-top:1rem;
+      justify-items:center;
+    }
+
+    .btn-link { width: 100%; text-decoration: none; }
+
+    .btn-tile {
+      width:100%;
+      display:block;
+      text-align:center;
+      padding:1.3rem;
+      background:var(--walnut);
+      color:var(--cream);
+      border-radius:14px;
+      font-size:1.2rem;
+      font-weight:600;
+      transition:0.25s ease;
+      box-shadow:0 4px 8px var(--shadow);
+      letter-spacing:0.5px;
+    }
+
+    .btn-tile:hover {
+      background:var(--cream);
+      color:var(--walnut);
+      transform:translateY(-3px);
+      box-shadow:0 6px 14px rgba(0,0,0,0.28);
+      outline: 2px solid var(--walnut);
+    }
+  </style>
+</head>
+
+<body>
+<header>Lynn’s Engraving Kiosk</header>
+
+<div class="carousel" id="carousel">
+  <div class="carousel-controls">
+    <button class="carousel-btn" type="button" data-dir="prev" aria-label="Previous">&#10094;</button>
+    <button class="carousel-btn" type="button" data-dir="next" aria-label="Next">&#10095;</button>
+  </div>
+  <div class="carousel-dots" id="carouselDots"></div>
+</div>
+
+<main>
+  <div class="button-grid">
+    <a class="btn-link" href="MemorialBands.html"><span class="btn-tile">Memorial Bands</span></a>
+    <a class="btn-link" href="DogTags.html"><span class="btn-tile">Dog Tags</span></a>
+    <a class="btn-link" href="Drinkware.html"><span class="btn-tile">Drinkware</span></a>
+    <a class="btn-link" href="Plaques.html"><span class="btn-tile">Plaques</span></a>
+    <a class="btn-link" href="Frames.html"><span class="btn-tile">Frames &amp; Framing</span></a>
+    <a class="btn-link" href="CustomOrders.html"><span class="btn-tile">Custom Orders</span></a>
+    <a class="btn-link" href="Other.html"><span class="btn-tile">Other</span></a>
+    <a class="btn-link" href="Admin.html"><span class="btn-tile">Admin</span></a>
+  </div>
+</main>
+
+<script>
+(function () {
+  const imageFiles = [
+    "Images/mb1.webp","Images/mb2.webp","Images/mb3.jpg","Images/mb4.jpg","Images/mb5.avif",
+    "Images/mb6.jpg","Images/mb7.webp","Images/mb8.webp","Images/mb9.jpg","Images/mb10.jpg",
+    "Images/mb11.jpg","Images/mb12.jpg","Images/mb13.jpg","Images/mb14.jpg","Images/mb15.jpg",
+    "Images/mb16.jpg","Images/mb17.webp","Images/mb18.jpeg","Images/mb19.jpeg","Images/mb20.jpeg",
+    "Images/mb21.jpeg","Images/mb22.jpeg","Images/mb23.jpeg","Images/mb24.jpeg","Images/mb25.png",
+    "Images/mb26.jpeg","Images/mb27.jpeg","Images/mb28.jpeg","Images/mb29.jpg","Images/mb30.png",
+    "Images/mb31.webp","Images/mb32.jpeg","Images/mb33.webp","Images/mb34.jpeg","Images/mb35.jpeg",
+    "Images/mb36.jpeg","Images/mb37.jpeg","Images/mb38.webp","Images/mb39.jpeg","Images/mb40.webp",
+    "Images/mb41.webp","Images/mb42.webp","Images/mb43.jpg","Images/mb44.webp"
+  ];
+
+  const carousel = document.getElementById("carousel");
+  const dotsWrap = document.getElementById("carouselDots");
+
+  let current = 0;
+  const intervalMs = 4000;
+  let timer = null;
+
+  function getImages() {
+    return Array.from(carousel.querySelectorAll(".carousel-image"));
+  }
+
+  function safeSetActive(index) {
+    const images = getImages();
+    if (!images.length) return;
+
+    images.forEach(img => img.classList.remove("active"));
+    current = ((index % images.length) + images.length) % images.length;
+    images[current].classList.add("active");
+  }
+
+  function rebuildDots() {
+    dotsWrap.innerHTML = "";
+    const images = getImages();
+    images.forEach((_, i) => {
+      const d = document.createElement("button");
+      d.type = "button";
+      d.className = "carousel-dot" + (i === current ? " active" : "");
+      d.addEventListener("click", () => { showSlide(i); resetTimer(); });
+      dotsWrap.appendChild(d);
+    });
+  }
+
+  function syncDots() {
+    const dots = Array.from(dotsWrap.querySelectorAll(".carousel-dot"));
+    dots.forEach(dot => dot.classList.remove("active"));
+    if (dots[current]) dots[current].classList.add("active");
+  }
+
+  function showSlide(index) {
+    const images = getImages();
+    if (!images.length) return;
+    safeSetActive(index);
+    syncDots();
+  }
+
+  function nextSlide(dir = 1) {
+    showSlide(current + dir);
+  }
+
+  function resetTimer() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(() => nextSlide(1), intervalMs);
+  }
+
+  // ✅ Fisher–Yates shuffle (unbiased)
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  function buildSlides() {
+    const controls = carousel.querySelector(".carousel-controls");
+
+    imageFiles.forEach((src) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = src.split("/").pop().replace(/\.(webp|jpg|jpeg|png|avif)$/i, "");
+      img.className = "carousel-image";
+      img.loading = "lazy";
+
+      img.onerror = () => {
+        const wasActive = img.classList.contains("active");
+        img.remove();
+
+        const images = getImages();
+        if (!images.length) {
+          dotsWrap.innerHTML = "";
+          return;
+        }
+
+        current = Math.min(current, images.length - 1);
+        if (wasActive) safeSetActive(current);
+
+        rebuildDots();
+        syncDots();
+      };
+
+      carousel.insertBefore(img, controls);
+    });
+  }
+
+  document.querySelectorAll(".carousel-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (!getImages().length) return;
+      const dir = btn.dataset.dir === "prev" ? -1 : 1;
+      nextSlide(dir);
+      resetTimer();
+    });
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (!getImages().length) return;
+    if (e.key === "ArrowLeft") { nextSlide(-1); resetTimer(); }
+    if (e.key === "ArrowRight") { nextSlide(1); resetTimer(); }
+  });
+
+  let startX = 0;
+  carousel.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+
+  carousel.addEventListener("touchend", (e) => {
+    if (!getImages().length) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) {
+      nextSlide(dx > 0 ? -1 : 1);
+      resetTimer();
+    }
+  }, { passive: true });
+
+  // ✅ Init (shuffle happens ONCE per load)
+  shuffleArray(imageFiles);
+  buildSlides();
+  safeSetActive(0);
+  rebuildDots();
+  resetTimer();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+/*─────────────────────────────────────────────
+  Lynn’s Engraving Kiosk Theme v1.2
+  Boutique Color Palette: Walnut, Cream, Black
+  Optimized for Touch + Kiosk Displays
+  Updated: December 2025
+──────────────────────────────────────────────*/
+
+:root {
+  --walnut: #5C4033;
+  --cream: #FFF9F0;
+  --black: #111111;
+  --shadow: rgba(0, 0, 0, 0.25);
+}
+
+/* GLOBAL RESET */
+* { box-sizing: border-box; }
+
+/* BODY */
+body {
+  background-color: var(--cream);
+  color: var(--black);
+  font-family: 'Poppins', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--walnut);
+  color: var(--cream);
+  padding: 1.4rem 0;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 8px var(--shadow);
+}
+
+/* MAIN WRAPPER */
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+/* BUTTON GRID (Home / Admin / Other) */
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.4rem;
+  margin-top: 1rem;
+  justify-items: center;
+}
+
+/* BUTTONS */
+button,
+.btn {
+  width: 100%;
+  padding: 1.3rem;
+  background-color: var(--walnut);
+  color: var(--cream);
+  border: none;
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 10px var(--shadow);
+  transition: all 0.25s ease;
+  letter-spacing: 0.5px;
+}
+
+button:hover,
+.btn:hover {
+  background-color: var(--cream);
+  color: var(--walnut);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  outline: 2px solid var(--walnut);
+}
+
+button:active { transform: scale(0.98); }
+
+/* LINK BUTTON FIX */
+a.btn,
+a button { text-decoration: none; }
+
+/* CARDS (Forms / Info Panels) */
+.card,
+form {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 4px 12px var(--shadow);
+  max-width: 550px;
+  margin: 20px auto;
+  text-align: left;
+}
+
+/* HEADINGS */
+h1, h2, h3 {
+  color: var(--walnut);
+  margin-top: 0;
+  text-align: center;
+}
+
+/* FORM LABELS */
+label {
+  font-weight: 700;
+  display: block;
+  margin-top: 14px;
+}
+
+/* FORM INPUTS */
+input[type="text"],
+input[type="email"],
+input[type="file"],
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/*─────────────────────────────────────────────
+  FIXES: SLIDESHOW / CAROUSEL POSITIONING
+──────────────────────────────────────────────*/
+
+/* SLIDESHOW / CAROUSEL CONTAINERS */
+.slideshow-container,
+.carousel {
+  max-width: 720px;
+  margin: 20px auto 30px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 4px 12px var(--shadow);
+  position: relative; /* ✅ required so arrows overlay correctly */
+}
+
+/* Slides hidden by default (JS will show active) */
+.slide { display: none; } /* ✅ important for slideshow pages */
+
+/* Images */
+.slide img,
+.carousel-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* If you use the carousel with fixed area, this keeps images from stretching */
+.carousel {
+  aspect-ratio: 16 / 9;   /* ✅ works great for kiosk screens */
+}
+.carousel-image {
+  height: 100%;
+  object-fit: cover;      /* ✅ prevents squish */
+  display: none;
+}
+.carousel-image.active {
+  display: block;
+}
+
+/*─────────────────────────────────────────────
+  FIXES: ARROWS (SLIDESHOW + CAROUSEL)
+──────────────────────────────────────────────*/
+
+.prev,
+.next {
+  position: absolute;   /* ✅ overlay on image */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
+
+.prev,
+.next,
+.carousel-btn {
+  cursor: pointer;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 2rem;
+  border: none;
+  transition: 0.2s ease;
+}
+
+.prev:hover,
+.next:hover,
+.carousel-btn:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+/*─────────────────────────────────────────────
+  DOTS (SLIDESHOW + CAROUSEL)
+──────────────────────────────────────────────*/
+
+.dots,
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 10px;
+}
+
+.dot,
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.35);
+  cursor: pointer;
+  border: none;
+}
+
+.dot.active,
+.carousel-dot.active {
+  background: var(--walnut);
+}
+
+/* HOME BUTTON AREA */
+.home-btn {
+  margin-top: 30px;
+  text-align: center;
+}
+
+/* ADMIN / SECONDARY BUTTON */
+.btn.secondary { background: #222; }
+.btn.secondary:hover {
+  background: #444;
+  color: #fff;
+  outline: none;
+}
+
+/* FOOTER (Optional) */
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dog Tags - Lynn’s Engraving</title>
+
+  <style>
+    :root{
+      --walnut:#5C4033;
+      --cream:#FFF8E7;
+      --dark:#111;
+      --shadow:rgba(0,0,0,0.18);
+    }
+
+    body{
+      margin:0;
+      padding:20px;
+      font-family: Arial, sans-serif;
+      background:var(--cream);
+      color:var(--dark);
+      text-align:center;
+    }
+
+    header{
+      font-size:32px;
+      font-weight:800;
+      margin:0 0 20px 0;
+      color:var(--walnut);
+    }
+
+    /* Slideshow (kiosk size) */
+    .slideshow-container{
+      width:520px;
+      max-width:calc(100vw - 40px);
+      position:relative;
+      margin:0 auto 14px auto;
+      border-radius:12px;
+      overflow:hidden;
+      background:#000;
+      padding:10px;
+      box-shadow:0 0 12px rgba(0,0,0,0.25);
+      touch-action:pan-y;
+    }
+
+    .slide{ display:none; }
+
+    .slide img{
+      width:100%;
+      height:320px;
+      object-fit:cover;
+      border-radius:8px;
+      user-select:none;
+      -webkit-user-drag:none;
+      background:#000;
+    }
+
+    /* Arrows */
+    .nav-btn{
+      cursor:pointer;
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      padding:12px 14px;
+      color:#fff;
+      background:rgba(0,0,0,0.45);
+      font-size:30px;
+      font-weight:900;
+      border-radius:10px;
+      user-select:none;
+      border:none;
+      outline:none;
+    }
+    .nav-btn:hover{ background:rgba(0,0,0,0.75); }
+    .nav-prev{ left:10px; }
+    .nav-next{ right:10px; }
+
+    /* Dots */
+    .dots{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin:10px 0 18px 0;
+      flex-wrap:wrap;
+    }
+
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:rgba(0,0,0,0.25);
+      cursor:pointer;
+    }
+
+    .dot.active{ background:var(--walnut); }
+
+    /* Form */
+    form{
+      background:#fff;
+      padding:20px;
+      max-width:520px;
+      margin:0 auto;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.2);
+      text-align:left;
+    }
+
+    form h2{
+      margin:0 0 6px 0;
+      color:var(--walnut);
+      text-align:center;
+    }
+
+    form p{
+      margin:0 0 14px 0;
+      text-align:center;
+    }
+
+    label{
+      font-weight:700;
+      display:block;
+      margin-top:12px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    textarea{
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      border-radius:6px;
+      border:1px solid #ccc;
+      box-sizing:border-box;
+    }
+
+    textarea{
+      resize:vertical;
+      min-height:120px;
+    }
+
+    .btn{
+      width:100%;
+      margin-top:15px;
+      padding:12px;
+      background:var(--walnut);
+      color:var(--cream);
+      border:none;
+      border-radius:10px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      transition:0.2s ease;
+      box-shadow:0 4px 8px var(--shadow);
+    }
+
+    .btn:hover{
+      background:var(--cream);
+      color:var(--walnut);
+      outline:2px solid var(--walnut);
+    }
+
+    .home-btn{
+      max-width:520px;
+      margin:14px auto 0 auto;
+      text-align:center;
+    }
+
+    /* ✅ Link styled like button (no <a><button>) */
+    .btn-link{
+      display:block;
+      text-decoration:none;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>Lynn’s Engraving Kiosk – Dog Tags</header>
+
+<div class="slideshow-container" id="slideshow">
+  <!-- ✅ Correct paths: DogTags.html is inside Kiosk/ -->
+  <div class="slide"><img src="Images/mb9.jpg"  alt="Dog Tags 1"></div>
+  <div class="slide"><img src="Images/mb10.jpg" alt="Dog Tags 2"></div>
+  <div class="slide"><img src="Images/mb11.jpg" alt="Dog Tags 3"></div>
+  <div class="slide"><img src="Images/mb12.jpg" alt="Dog Tags 4"></div>
+  <div class="slide"><img src="Images/mb13.jpg" alt="Dog Tags 5"></div>
+  <div class="slide"><img src="Images/mb14.jpg" alt="Dog Tags 6"></div>
+  <div class="slide"><img src="Images/mb15.jpg" alt="Dog Tags 7"></div>
+  <div class="slide"><img src="Images/mb16.jpg" alt="Dog Tags 8"></div>
+
+  <button class="nav-btn nav-prev" type="button" aria-label="Previous" id="prevBtn">❮</button>
+  <button class="nav-btn nav-next" type="button" aria-label="Next" id="nextBtn">❯</button>
+</div>
+
+<div class="dots" id="dotsWrap"></div>
+
+<form id="orderForm"
+      action="https://formsubmit.co/lynnsengraving24@gmail.com"
+      method="POST"
+      enctype="multipart/form-data">
+
+  <input type="hidden" name="tracking" id="trackingField" value="">
+  <input type="hidden" name="_subject" value="New Dog Tags Order">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_autoresponse" value="Thank you for your Dog Tags order! We will contact you shortly.">
+  <input type="hidden" name="_next" value="track.html">
+
+  <h2>Order Dog Tags</h2>
+  <p>Please fill out the form below.</p>
+
+  <label>Your Name</label>
+  <input type="text" name="name" required>
+
+  <label>Your Email</label>
+  <input type="email" name="email" required>
+
+  <label>Engraving Text</label>
+  <textarea name="engraving" required></textarea>
+
+  <label>Upload Image or Logo (Optional)</label>
+  <input type="file" name="attachment" accept="image/*">
+
+  <label>Additional Notes</label>
+  <textarea name="notes"></textarea>
+
+  <button class="btn" type="submit">Submit Order</button>
+</form>
+
+<div class="home-btn">
+  <a class="btn-link" href="index.html"><span class="btn">Return Home</span></a>
+</div>
+
+<script>
+(function () {
+  const slideshow = document.getElementById("slideshow");
+  const slides = Array.from(document.getElementsByClassName("slide"));
+  const dotsWrap = document.getElementById("dotsWrap");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+
+  let slideIndex = 0;
+  const intervalMs = 4000;
+  let timer = null;
+
+  // ✅ Remove broken images automatically
+  function pruneBrokenImages() {
+    slides.forEach((slide, idx) => {
+      const img = slide.querySelector("img");
+      if (!img) return;
+
+      img.addEventListener("error", () => {
+        slide.remove();
+        // rebuild arrays safely
+        const newSlides = Array.from(document.getElementsByClassName("slide"));
+        if (!newSlides.length) {
+          dotsWrap.innerHTML = "";
+          clearInterval(timer);
+          return;
+        }
+        // keep index in range
+        slideIndex = Math.min(slideIndex, newSlides.length - 1);
+        buildDots(newSlides);
+        render(newSlides);
+      });
+    });
+  }
+
+  function buildDots(currentSlides) {
+    const s = currentSlides || slides;
+    dotsWrap.innerHTML = "";
+    s.forEach((_, i) => {
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.addEventListener("click", () => goTo(i));
+      dotsWrap.appendChild(dot);
+    });
+  }
+
+  function render(currentSlides) {
+    const s = currentSlides || Array.from(document.getElementsByClassName("slide"));
+    const dots = Array.from(dotsWrap.getElementsByClassName("dot"));
+
+    s.forEach(sl => sl.style.display = "none");
+    dots.forEach(d => d.classList.remove("active"));
+
+    if (!s.length) return;
+
+    s[slideIndex].style.display = "block";
+    if (dots[slideIndex]) dots[slideIndex].classList.add("active");
+  }
+
+  function goTo(i) {
+    const s = Array.from(document.getElementsByClassName("slide"));
+    if (!s.length) return;
+
+    slideIndex = (i + s.length) % s.length;
+    render(s);
+    resetTimer();
+  }
+
+  function next(){ goTo(slideIndex + 1); }
+  function prev(){ goTo(slideIndex - 1); }
+
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(next, intervalMs);
+  }
+
+  // Buttons
+  prevBtn.addEventListener("click", prev);
+  nextBtn.addEventListener("click", next);
+
+  // Swipe
+  let startX = 0;
+  slideshow.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+
+  slideshow.addEventListener("touchend", (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const dx = endX - startX;
+    if (Math.abs(dx) > 40) (dx > 0 ? prev() : next());
+  }, { passive: true });
+
+  // Keyboard
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") prev();
+    if (e.key === "ArrowRight") next();
+  });
+
+  // Tracking + prevent double submit
+  const form = document.getElementById("orderForm");
+  let submitted = false;
+  form.addEventListener("submit", function () {
+    if (submitted) return;
+    submitted = true;
+
+    const tracking = "DT-" + Math.floor(100000 + Math.random() * 900000);
+    document.getElementById("trackingField").value = tracking;
+
+    alert("Your order has been submitted!\nTracking Number: " + tracking);
+  });
+
+  // Init
+  pruneBrokenImages();
+  buildDots();
+  render();
+  resetTimer();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Lynn’s Engraving</title>
+
+  <style>
+    :root{
+      --walnut:#5C4033;
+      --cream:#FFF8E7;
+      --dark:#111;
+      --shadow:rgba(0,0,0,0.18);
+    }
+
+    body{
+      margin:0;
+      background:var(--cream);
+      font-family:Arial, sans-serif;
+      color:var(--dark);
+      text-align:center;
+    }
+
+    header{
+      background:var(--walnut);
+      color:var(--cream);
+      padding:1.4rem 0;
+      font-size:1.9rem;
+      font-weight:800;
+      letter-spacing:1px;
+      box-shadow:0 2px 6px rgba(0,0,0,0.25);
+      position:sticky;
+      top:0;
+      z-index:50;
+    }
+
+    main{
+      max-width:700px;
+      margin:40px auto;
+      padding:20px;
+    }
+
+    .card{
+      background:#fff;
+      padding:30px;
+      border-radius:14px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    h2{
+      margin-top:0;
+      color:var(--walnut);
+    }
+
+    p{
+      font-size:1.05rem;
+      margin-bottom:25px;
+    }
+
+    .btn{
+      display:block;
+      width:100%;
+      max-width:360px;
+      margin:12px auto;
+      padding:14px;
+      background:var(--walnut);
+      color:var(--cream);
+      border:none;
+      border-radius:14px;
+      font-size:1.1rem;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 4px 8px var(--shadow);
+      transition:0.25s ease;
+      text-decoration:none;
+    }
+
+    .btn:hover{
+      background:var(--cream);
+      color:var(--walnut);
+      outline:2px solid var(--walnut);
+      transform:translateY(-2px);
+    }
+
+    .btn.secondary{
+      background:#222;
+    }
+
+    .btn.secondary:hover{
+      background:#444;
+      color:#fff;
+      outline:none;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>Lynn’s Engraving – Admin Panel</header>
+
+<main>
+  <div class="card">
+    <h2>Admin Dashboard</h2>
+    <p>
+      This area is reserved for administrative tools such as order review,
+      uploads, pricing updates, and kiosk settings.
+    </p>
+
+    <!-- Future Admin Links -->
+    <a class="btn secondary" href="#">View Orders (Coming Soon)</a>
+    <a class="btn secondary" href="#">Manage Images (Coming Soon)</a>
+    <a class="btn secondary" href="#">Settings (Coming Soon)</a>
+
+    <a class="btn" href="index.html">Return to Kiosk Home</a>
+  </div>
+</main>
+
+</body>
+</html>
